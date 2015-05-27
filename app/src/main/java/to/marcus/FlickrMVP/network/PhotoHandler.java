@@ -84,4 +84,9 @@ public class PhotoHandler<Token> extends HandlerThread {
         mHandler.obtainMessage(0, token).sendToTarget();
         Log.i(TAG, "Got a URL: " + url);
     }
+
+    public void clearQueue(){
+        mHandler.removeMessages(0);
+        requestMap.clear();
+    }
 }

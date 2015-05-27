@@ -1,5 +1,6 @@
 package to.marcus.FlickrMVP.ui;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,6 +48,7 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
         setHasOptionsMenu(true);
         presenter.onImagesRequested("test");
         //setup a new thread (main thread) to communicate with the background thread
+        /*
         mResponseHandler = new PhotoHandler<ImageView>(new Handler());
         mResponseHandler.start();
         mResponseHandler.getLooper();
@@ -56,6 +58,14 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
                 imageView.setImageBitmap(thumbnail);
             }
         });
+        */
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        Log.i(TAG, "activity created");
+        super.onActivityCreated(savedInstanceState);
+        presenter.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -103,22 +113,36 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
         mResponseHandler.quit();
     }
 
-    public void setupAdapter(){
-        if(getActivity() == null || mGridView == null) return;
-        if (mImages != null){
-            mGridView.setAdapter(new PhotoAdapter(getActivity(), mImages, mResponseHandler));
-        }else{
-            mGridView.setAdapter(null);
-        }
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        mResponseHandler.clearQueue();
+    }
+
+    //View stuff
+
+    @Override
+    public void setGridViewAdapter(PhotoAdapter adapter){
+        //if(getActivity() == null || mGridView == null) return;
+       // if (mImages != null){
+             mGridView.setAdapter(adapter);
+            //mGridView.setAdapter(new PhotoAdapter(getActivity(), mImages, mResponseHandler));
+      //  }else{
+           // mGridView.setAdapter(null);
+      //  }
     }
 
     @Override
     public void getPhotoArray(ArrayList<Photo> images) {
         Log.i(TAG, "array received via presenter");
         this.mImages = images;
-        setupAdapter();
+        //setAdapter();
     }
 
+    @Override
+    public Context getContext(){
+        return this.getActivity();
+    }
     //showloadingindicator()
         //progressIndicator.setVisibility(Visible)
 
