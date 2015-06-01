@@ -1,9 +1,7 @@
 package to.marcus.FlickrMVP.ui;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.ImageView;
+
 import java.util.ArrayList;
 import javax.inject.Inject;
 import to.marcus.FlickrMVP.BaseApplication;
@@ -46,26 +44,7 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
                 .createScopedGraph(new PresenterModule(this))
                 .inject(this);
         setHasOptionsMenu(true);
-        presenter.onImagesRequested("test");
-        //setup a new thread (main thread) to communicate with the background thread
-        /*
-        mResponseHandler = new PhotoHandler<ImageView>(new Handler());
-        mResponseHandler.start();
-        mResponseHandler.getLooper();
-        //listen for incoming images sent back to main handler thread
-        mResponseHandler.setListener(new PhotoHandler.Listener<ImageView>() {
-            public void onPhotoDownloaded(ImageView imageView, Bitmap thumbnail) {
-                imageView.setImageBitmap(thumbnail);
-            }
-        });
-        */
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState){
-        Log.i(TAG, "activity created");
-        super.onActivityCreated(savedInstanceState);
-        presenter.onActivityCreated(savedInstanceState);
+        presenter.onImagesRequested("search term here");
     }
 
     @Override
@@ -104,6 +83,7 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
     @Override
     public void onPause(){
         super.onPause();
+        //destroy bus
         presenter.onPause();
     }
 
@@ -119,30 +99,32 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
         mResponseHandler.clearQueue();
     }
 
-    //View stuff
+    /**
+     * View implementations
+     */
 
     @Override
     public void setGridViewAdapter(PhotoAdapter adapter){
-        //if(getActivity() == null || mGridView == null) return;
-       // if (mImages != null){
-             mGridView.setAdapter(adapter);
-            //mGridView.setAdapter(new PhotoAdapter(getActivity(), mImages, mResponseHandler));
-      //  }else{
-           // mGridView.setAdapter(null);
-      //  }
+        mGridView.setAdapter(adapter);
     }
 
     @Override
-    public void getPhotoArray(ArrayList<Photo> images) {
+    public void setPhotoArray(ArrayList<Photo> images) {
         Log.i(TAG, "array received via presenter");
         this.mImages = images;
-        //setAdapter();
+        presenter.initPresenter();
     }
 
     @Override
     public Context getContext(){
         return this.getActivity();
     }
+
+    @Override
+    public ArrayList<Photo> getPhotoArray(){
+        return mImages;
+    }
+
     //showloadingindicator()
         //progressIndicator.setVisibility(Visible)
 

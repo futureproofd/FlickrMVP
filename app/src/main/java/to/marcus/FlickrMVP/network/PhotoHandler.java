@@ -45,7 +45,7 @@ public class PhotoHandler<Token> extends HandlerThread {
             public void handleMessage(Message msg){
                 if (msg.what == 0){
                     Token token = (Token)msg.obj;
-                    Log.i(TAG, "Got a request for url: "+ requestMap.get(token));
+                    Log.i(TAG, "2. Got a request for url: "+ requestMap.get(token));
                     handleRequest(token);
                 }
             }
@@ -62,7 +62,7 @@ public class PhotoHandler<Token> extends HandlerThread {
             byte[] bitmapBytes = new GetBytes().getUrlBytes(url);
             final Bitmap bitmap = BitmapFactory
                     .decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
-            Log.i(TAG, "Bitmap created");
+            Log.i(TAG, "3. Bitmap created");
 
             mResponseHandler.post(new Runnable(){
                public void run(){
@@ -82,7 +82,7 @@ public class PhotoHandler<Token> extends HandlerThread {
         requestMap.put(token, url);
         //create message
         mHandler.obtainMessage(0, token).sendToTarget();
-        Log.i(TAG, "Got a URL: " + url);
+        Log.i(TAG, "1. Got a URL: " + url);
     }
 
     public void clearQueue(){
