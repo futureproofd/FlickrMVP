@@ -26,10 +26,10 @@ import to.marcus.FlickrMVP.ui.presenter.ImagePresenter;
  * Created by marcus on 31/03/15!
  */
 
-public class HomeFragment extends BaseFragment implements ImagePresenter.ImageView{
+public class HomeFragment extends BaseFragment implements ImagePresenter.PhotosView {
     private final String TAG = "HomeFragment";
     GridView mGridView;
-    ArrayList<Photo> mImages;
+    ArrayList<Photo> receivedPhotosList;
     @Inject ImagePresenter presenter;
     PhotoHandler mResponseHandler;
 
@@ -44,7 +44,7 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
                 .createScopedGraph(new PresenterModule(this))
                 .inject(this);
         setHasOptionsMenu(true);
-        presenter.onImagesRequested("search term here");
+        presenter.requestImages("search term here");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
         switch (item.getItemId()){
             case R.id.refresh:
                 Log.i(TAG, "clicked to get images!");
-                presenter.onImagesRequested("test");
+                presenter.requestImages("test");
                 return true;
         }
         Log.i(TAG, "didn't get shit");
@@ -109,10 +109,10 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
     }
 
     @Override
-    public void setPhotoArray(ArrayList<Photo> images) {
+    public void setPhotos(ArrayList<Photo> images) {
         Log.i(TAG, "array received via presenter");
-        this.mImages = images;
-        presenter.initPresenter();
+        this.receivedPhotosList = images;
+        presenter.initComponents();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.ImageVi
 
     @Override
     public ArrayList<Photo> getPhotoArray(){
-        return mImages;
+        return receivedPhotosList;
     }
 
     //showloadingindicator()

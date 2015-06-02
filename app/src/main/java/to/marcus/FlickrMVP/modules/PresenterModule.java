@@ -17,14 +17,14 @@ import to.marcus.FlickrMVP.ui.HomeFragment;
 )
 public class PresenterModule {
 
-    private final ImagePresenter.ImageView imageView;
+    private final ImagePresenter.PhotosView photosView;
 
-    public PresenterModule(ImagePresenter.ImageView imageView){
-        this.imageView = imageView;
+    public PresenterModule(ImagePresenter.PhotosView photosView){
+        this.photosView = photosView;
     }
 
     @Provides @Singleton
     ImagePresenter provideImagePresenter(Bus bus){
-        return new ImagePresenter(bus, imageView);
+        return new ImagePresenter(bus, photosView);
     }
 }

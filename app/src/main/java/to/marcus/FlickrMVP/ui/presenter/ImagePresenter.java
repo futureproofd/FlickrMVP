@@ -2,10 +2,8 @@ package to.marcus.FlickrMVP.ui.presenter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.ImageView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
@@ -22,8 +20,8 @@ import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 public class ImagePresenter{
 
     //define a View interface
-    public interface ImageView{
-        void setPhotoArray(ArrayList<Photo> images);
+    public interface PhotosView {
+        void setPhotos(ArrayList<Photo> images);
         ArrayList<Photo> getPhotoArray();
         void setGridViewAdapter(PhotoAdapter adapter);
         Context getContext();
@@ -31,15 +29,15 @@ public class ImagePresenter{
 
     private final String TAG = "ImagePresenter";
     private final Bus bus;
-    private final ImageView view;
+    private final PhotosView view;
     PhotoHandler mResponseHandler;
 
-    public ImagePresenter(Bus bus, ImageView view){
+    public ImagePresenter(Bus bus, PhotosView view){
         this.bus = bus;
         this.view = view;
     }
 
-    public void initPresenter(){
+    public void initComponents(){
         initResponseHandler();
         initAdapter();
     }
@@ -52,7 +50,7 @@ public class ImagePresenter{
         bus.unregister(this);
     }
 
-    public void onImagesRequested(String request){
+    public void requestImages(String request){
         //view.showloadingIndicator  -- HomeFragment will implement our view interface and override this method
         Log.i(TAG, "Images Requested Event!");
         bus.post(new ImagesRequestedEvent(request));  //this will notify our ApiRequestHandler
@@ -61,7 +59,7 @@ public class ImagePresenter{
     @Subscribe
     public void onImagesArrayReceived(ImagesReceivedEvent event){
         Log.i(TAG, "array ready for presenter");
-        view.setPhotoArray(event.getResult());
+        view.setPhotos(event.getResult());
     }
 
 
