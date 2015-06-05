@@ -1,4 +1,4 @@
-package to.marcus.FlickrMVP.event;
+package to.marcus.FlickrMVP.data.event;
 
 /**
  * Created by mplienegger on 4/20/2015

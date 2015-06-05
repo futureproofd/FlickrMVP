@@ -2,44 +2,61 @@ package to.marcus.FlickrMVP.ui.presenter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
-import to.marcus.FlickrMVP.event.ImagesReceivedEvent;
-import to.marcus.FlickrMVP.event.ImagesRequestedEvent;
+import to.marcus.FlickrMVP.data.PhotoFactory;
+import to.marcus.FlickrMVP.data.event.ImagesReceivedEvent;
+import to.marcus.FlickrMVP.data.event.ImagesRequestedEvent;
+import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.model.Photos.Photo;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 
 /**
- * Created by marcus on 15/04/15.
- */
+* Created by marcus on 15/04/15
+*/
 
 public class ImagePresenter{
-
-    //define a View interface
-    public interface PhotosView {
-        void setPhotos(ArrayList<Photo> images);
-        ArrayList<Photo> getPhotoArray();
-        void setGridViewAdapter(PhotoAdapter adapter);
-        Context getContext();
-    }
-
-    private final String TAG = "ImagePresenter";
+    private final String TAG = ImagePresenter.class.getSimpleName();
     private final Bus bus;
     private final PhotosView view;
+    private Photos defaultPhotosArray;
     PhotoHandler mResponseHandler;
+
+    /*
+    * define a View interface - should move this into it's own view interface class
+    */
+    public interface PhotosView {
+        void setPhotos(ArrayList<Photo> images);
+        public ArrayList<Photo> getPhotoArray();
+        void setGridViewAdapter(PhotoAdapter adapter);
+        public Context getContext();
+    }
 
     public ImagePresenter(Bus bus, PhotosView view){
         this.bus = bus;
         this.view = view;
+        initResponseHandler();
     }
 
-    public void initComponents(){
-        initResponseHandler();
-        initAdapter();
+    //to-do
+    public void onActivityCreated(Bundle savedInstanceState){
+        if(savedInstanceState == null){
+            //view.showprogressbar
+            initInstanceState();
+            requestImages("search term");
+        }else{
+            //getInstanceState
+            //pullImagesFromCache --need to setup LRU
+        }
+    }
+
+    private void initInstanceState(){
+         defaultPhotosArray = PhotoFactory.Photos.initDefaultPhotosArray();
     }
 
     public void onResume(){
@@ -59,7 +76,8 @@ public class ImagePresenter{
     @Subscribe
     public void onImagesArrayReceived(ImagesReceivedEvent event){
         Log.i(TAG, "array ready for presenter");
-        view.setPhotos(event.getResult());
+        this.defaultPhotosArray.setPhotos(event.getResult());
+        initAdapter();
     }
 
 
@@ -77,7 +95,8 @@ public class ImagePresenter{
     }
 
     private void initAdapter(){
-        view.setGridViewAdapter(new PhotoAdapter(view.getContext(), view.getPhotoArray(), mResponseHandler));
+        //to-do : determine which photosArray to use (cached / network?)
+        view.setGridViewAdapter(new PhotoAdapter(view.getContext(), defaultPhotosArray.getPhotos(), mResponseHandler));
     }
 
 }

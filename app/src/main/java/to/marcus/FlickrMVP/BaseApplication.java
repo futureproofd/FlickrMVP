@@ -5,7 +5,7 @@ import android.content.Context;
 import com.squareup.otto.Bus;
 import javax.inject.Inject;
 import dagger.ObjectGraph;
-import to.marcus.FlickrMVP.event.ApiRequestHandler;
+import to.marcus.FlickrMVP.data.event.ApiRequestHandler;
 import to.marcus.FlickrMVP.modules.Modules;
 import to.marcus.FlickrMVP.network.ApiService;
 

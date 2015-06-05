@@ -1,4 +1,4 @@
-package to.marcus.FlickrMVP.event;
+package to.marcus.FlickrMVP.data.event;
 
 import android.util.Log;
 

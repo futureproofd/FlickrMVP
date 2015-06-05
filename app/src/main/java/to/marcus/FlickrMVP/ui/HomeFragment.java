@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-
 import java.util.ArrayList;
 import javax.inject.Inject;
 import to.marcus.FlickrMVP.BaseApplication;
@@ -44,7 +43,13 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.PhotosV
                 .createScopedGraph(new PresenterModule(this))
                 .inject(this);
         setHasOptionsMenu(true);
-        presenter.requestImages("search term here");
+        //presenter.requestImages("search term here");
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        presenter.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -112,7 +117,6 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.PhotosV
     public void setPhotos(ArrayList<Photo> images) {
         Log.i(TAG, "array received via presenter");
         this.receivedPhotosList = images;
-        presenter.initComponents();
     }
 
     @Override

@@ -16,8 +16,9 @@ public class Photos {
     @Expose private int perpage;
     @Expose private String total;
     @Expose private ArrayList<Photo> photo = new ArrayList<Photo>();
-    //helper
+    //helpers
     public ArrayList<Photo> getPhotos(){return photo;}
+    public void setPhotos(ArrayList<Photo> photos){this.photo = photos;}
 
     public class Photo {
         //helpers
