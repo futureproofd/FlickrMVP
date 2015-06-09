@@ -5,7 +5,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import to.marcus.FlickrMVP.ui.presenter.ImagePresenter;
+import to.marcus.FlickrMVP.ui.presenter.ImagePresenterImpl;
 import to.marcus.FlickrMVP.ui.HomeFragment;
+import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 /**
  * Created by marcus on 4/2/2015
@@ -14,17 +16,23 @@ import to.marcus.FlickrMVP.ui.HomeFragment;
 @Module(injects = HomeFragment.class,
         addsTo = ApplicationModule.class,
         complete = false
-)
-public class PresenterModule {
+        )
+public class PresenterModule{
+    public static final String TAG = PresenterModule.class.getSimpleName();
 
-    private final ImagePresenter.PhotosView photosView;
+    private PhotosView photosView;
 
-    public PresenterModule(ImagePresenter.PhotosView photosView){
+    public PresenterModule(PhotosView photosView){
         this.photosView = photosView;
     }
 
+    @Provides
+    public PhotosView provideView(){
+        return photosView;
+    }
+
     @Provides @Singleton
-    ImagePresenter provideImagePresenter(Bus bus){
-        return new ImagePresenter(bus, photosView);
+    public ImagePresenter provideImagePresenter(PhotosView photosView, Bus bus){
+        return new ImagePresenterImpl(photosView, bus);
     }
 }

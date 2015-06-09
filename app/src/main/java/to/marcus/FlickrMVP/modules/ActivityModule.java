@@ -1,5 +1,5 @@
 package to.marcus.FlickrMVP.modules;
-
+/**
 import android.content.Context;
 import javax.inject.Singleton;
 import dagger.Module;
@@ -12,7 +12,9 @@ import to.marcus.FlickrMVP.ui.HomeFragment;
 /**
  * module only for objects existing on the scope of a single activity
  * can create activity specific singletons
- */
+
+CURRENTLY NOT NEEDED
+
 
 @Module(
         injects ={
@@ -34,10 +36,13 @@ public class ActivityModule {
     /**
      * allow the activity context to be injected but annotated to differentiate from application
      * context
-     */
+    */
+
+/*
     @Provides @Singleton @ForActivity
     Context provideActivityContext(){
         return activity;
     }
 
 }
+*/

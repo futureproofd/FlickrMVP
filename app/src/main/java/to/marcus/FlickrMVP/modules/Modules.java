@@ -14,7 +14,6 @@ public final class Modules{
         };
     }
 
-    private Modules() {
-        // No instances.
+    private Modules() {//no instances
     }
 }

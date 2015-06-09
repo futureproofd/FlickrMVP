@@ -20,16 +20,18 @@ import to.marcus.FlickrMVP.modules.PresenterModule;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 import to.marcus.FlickrMVP.ui.presenter.ImagePresenter;
+import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 /**
  * Created by marcus on 31/03/15!
  */
 
-public class HomeFragment extends BaseFragment implements ImagePresenter.PhotosView {
-    private final String TAG = "HomeFragment";
+public class HomeFragment extends BaseFragment implements PhotosView {
+    private final String TAG = HomeFragment.class.getSimpleName();
     GridView mGridView;
     ArrayList<Photo> receivedPhotosList;
-    @Inject ImagePresenter presenter;
+    @Inject
+    ImagePresenter presenter;
     PhotoHandler mResponseHandler;
 
     public static HomeFragment newInstance(){
@@ -107,7 +109,6 @@ public class HomeFragment extends BaseFragment implements ImagePresenter.PhotosV
     /**
      * View implementations
      */
-
     @Override
     public void setGridViewAdapter(PhotoAdapter adapter){
         mGridView.setAdapter(adapter);
