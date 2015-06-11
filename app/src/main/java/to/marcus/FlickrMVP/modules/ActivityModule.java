@@ -4,10 +4,10 @@ import android.content.Context;
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
-import to.marcus.FlickrMVP.BaseActivity;
+import to.marcus.FlickrMVP.ui.views.base.BaseActivity;
 import to.marcus.FlickrMVP.ForActivity;
-import to.marcus.FlickrMVP.ui.HomeActivity;
-import to.marcus.FlickrMVP.ui.HomeFragment;
+import to.marcus.FlickrMVP.ui.views.HomeActivity;
+import to.marcus.FlickrMVP.ui.views.HomeFragment;
 
 /**
  * module only for objects existing on the scope of a single activity

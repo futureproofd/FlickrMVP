@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
-import to.marcus.FlickrMVP.BaseApplication;
+import to.marcus.FlickrMVP.ui.views.base.BaseApplication;
 import to.marcus.FlickrMVP.network.ApiEndpoint;
 import to.marcus.FlickrMVP.network.ApiService;
 

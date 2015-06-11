@@ -1,14 +1,14 @@
-package to.marcus.FlickrMVP.ui;
+package to.marcus.FlickrMVP.ui.views;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import to.marcus.FlickrMVP.BaseActivity;
 
 /**
  * Created by marcus on 23/03/15
  */
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends FragmentActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
 
     @Override

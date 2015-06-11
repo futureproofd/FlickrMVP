@@ -25,17 +25,6 @@ public class ImagePresenterImpl implements ImagePresenter{
     private Photos defaultPhotosArray;
     PhotoHandler mResponseHandler;
 
-    /*
-    * define a View interface - should move this into it's own view interface class
-
-    public interface PhotosView {
-        void setPhotos(ArrayList<Photo> images);
-        public ArrayList<Photo> getPhotoArray();
-        void setGridViewAdapter(PhotoAdapter adapter);
-        public Context getContext();
-    }
-    */
-
     public ImagePresenterImpl(PhotosView view, Bus bus){
         this.bus = bus;
         this.view = view;

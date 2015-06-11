@@ -6,7 +6,7 @@ import dagger.Module;
 import dagger.Provides;
 import to.marcus.FlickrMVP.ui.presenter.ImagePresenter;
 import to.marcus.FlickrMVP.ui.presenter.ImagePresenterImpl;
-import to.marcus.FlickrMVP.ui.HomeFragment;
+import to.marcus.FlickrMVP.ui.views.HomeFragment;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 /**
@@ -17,6 +17,7 @@ import to.marcus.FlickrMVP.ui.views.PhotosView;
         addsTo = ApplicationModule.class,
         complete = false
         )
+
 public class PresenterModule{
     public static final String TAG = PresenterModule.class.getSimpleName();
 

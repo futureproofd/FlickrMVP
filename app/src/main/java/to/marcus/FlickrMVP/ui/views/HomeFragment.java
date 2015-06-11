@@ -1,26 +1,23 @@
-package to.marcus.FlickrMVP.ui;
+package to.marcus.FlickrMVP.ui.views;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.inject.Inject;
-import to.marcus.FlickrMVP.BaseApplication;
-import to.marcus.FlickrMVP.BaseFragment;
+import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photos.Photo;
 import to.marcus.FlickrMVP.modules.PresenterModule;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 import to.marcus.FlickrMVP.ui.presenter.ImagePresenter;
-import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 /**
  * Created by marcus on 31/03/15!
@@ -30,8 +27,7 @@ public class HomeFragment extends BaseFragment implements PhotosView {
     private final String TAG = HomeFragment.class.getSimpleName();
     GridView mGridView;
     ArrayList<Photo> receivedPhotosList;
-    @Inject
-    ImagePresenter presenter;
+    @Inject ImagePresenter presenter;
     PhotoHandler mResponseHandler;
 
     public static HomeFragment newInstance(){
@@ -39,13 +35,9 @@ public class HomeFragment extends BaseFragment implements PhotosView {
     }
 
     @Override
+    //Get BaseFragment scoped ObjectGraph
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        BaseApplication.get(getActivity())
-                .createScopedGraph(new PresenterModule(this))
-                .inject(this);
-        setHasOptionsMenu(true);
-        //presenter.requestImages("search term here");
     }
 
     @Override
@@ -60,24 +52,6 @@ public class HomeFragment extends BaseFragment implements PhotosView {
         View v = inflater.inflate(R.layout.fragment_grid_layout, container, false);
         mGridView = (GridView)v.findViewById(R.id.gridView);
         return v;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.action, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.refresh:
-                Log.i(TAG, "clicked to get images!");
-                presenter.requestImages("test");
-                return true;
-        }
-        Log.i(TAG, "didn't get shit");
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -106,9 +80,17 @@ public class HomeFragment extends BaseFragment implements PhotosView {
         mResponseHandler.clearQueue();
     }
 
+    //BaseFragment
+    @Override
+    public List<Object> getModules(){
+        return Arrays.<Object>asList(
+                new PresenterModule(this)
+        );
+    }
+
     /**
      * View implementations
-     */
+    */
     @Override
     public void setGridViewAdapter(PhotoAdapter adapter){
         mGridView.setAdapter(adapter);
