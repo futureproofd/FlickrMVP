@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="toolBarPrimary">#e62117</color>
+    <color name="toolBarDark">#c31c13</color>
+    <color name="tabScroll">#8a140e</color>
+</resources>

@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">simple-dagger-test</string>
+    <string name="app_name">FlickrMVP</string>
     <string name="api_key">4b37ee018d17b1aa7cd793ede2ea7ee7</string>
 </resources>
