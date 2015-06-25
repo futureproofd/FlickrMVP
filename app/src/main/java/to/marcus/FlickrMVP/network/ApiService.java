@@ -3,7 +3,7 @@ package to.marcus.FlickrMVP.network;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Query;
-import to.marcus.FlickrMVP.model.ImageResponse;
+import to.marcus.FlickrMVP.model.PhotosResponse;
 
 /**
  * Created by marcus on 27/04/15.
@@ -21,6 +21,6 @@ public interface ApiService {
                    @Query("extras") String EXTRA_SMALL_URL,
                    @Query("format") String format,
                    @Query("nojsoncallback") String set,
-                   Callback<ImageResponse> callback
+                   Callback<PhotosResponse> callback
     );
 }

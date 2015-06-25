@@ -15,7 +15,7 @@ public class PhotoFactory{
         public static to.marcus.FlickrMVP.model.Photos initDefaultPhotosArray(){
 
             final to.marcus.FlickrMVP.model.Photos defaultPhotosArray = new to.marcus.FlickrMVP.model.Photos();
-            defaultPhotosArray.setPhotos(new ArrayList<to.marcus.FlickrMVP.model.Photos.Photo>());
+            defaultPhotosArray.setPhotos(new ArrayList<to.marcus.FlickrMVP.model.Photo>());
             return defaultPhotosArray;
         }
     }

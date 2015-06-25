@@ -3,12 +3,10 @@ package to.marcus.FlickrMVP.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
 import to.marcus.FlickrMVP.ui.views.HomeFragment;
 
 /**
- * Created by mplienegger on 6/15/2015.
- * For MainActivity navigation
+ * For MainActivity navigation between fragments
  */
 
 public class HomePagerAdapter extends FragmentPagerAdapter{

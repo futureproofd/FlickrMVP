@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import java.util.ArrayList;
 import to.marcus.FlickrMVP.R;
+import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 
@@ -16,16 +17,16 @@ import to.marcus.FlickrMVP.network.PhotoHandler;
  *
  */
 
-public class PhotoAdapter extends ArrayAdapter<Photos.Photo> {
+public class PhotoAdapter extends ArrayAdapter<Photo> {
 
     private final Context context;
     private LayoutInflater mLayoutInflater;
-    private final ArrayList<Photos.Photo> mPhotos;
+    private final ArrayList<Photo> mPhotos;
     private ViewHolder viewHolder;
     PhotoHandler<ImageView> mPhotoHandler;
     private static final String TAG = "PhotoAdapter";
 
-    public PhotoAdapter(Context context, ArrayList<Photos.Photo> photos, PhotoHandler handler){
+    public PhotoAdapter(Context context, ArrayList<Photo> photos, PhotoHandler handler){
         super(context, android.R.layout.simple_list_item_1, photos);
         this.context = context;
         this.mPhotos = photos;
@@ -43,7 +44,7 @@ public class PhotoAdapter extends ArrayAdapter<Photos.Photo> {
     }
 
     @Override
-    public Photos.Photo getItem(int position) {
+    public Photo getItem(int position) {
         return mPhotos == null ? null : mPhotos.get(position);
     }
 
@@ -58,7 +59,7 @@ public class PhotoAdapter extends ArrayAdapter<Photos.Photo> {
             viewHolder.imageView = (ImageView) view.findViewById(R.id.photo_item_imageView);
             viewHolder.imageView.setImageResource(R.drawable.ic_launcher);
             view.setTag(viewHolder);
-            Photos.Photo photo = getItem(position);
+            Photo photo = getItem(position);
             mPhotoHandler.queueThumbnail(viewHolder.imageView, photo.getUrl());
         }else{
             viewHolder = (ViewHolder)view.getTag();

@@ -34,18 +34,28 @@ public class ImagePresenterImpl implements ImagePresenter{
     //to-do
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
+        Log.i(TAG, "on activity created");
         if(savedInstanceState == null){
             //view.showprogressbar
             initInstanceState();
-            requestImages("search term");
+            requestNetworkPhotos("search term");
         }else{
-            //getInstanceState
             //pullImagesFromCache --need to setup LRU
+            restoreInstanceState(savedInstanceState);
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){}
+    public void onSaveInstanceState(Bundle out){
+        Log.i(TAG, "on save instance state");
+        Photos.putParcelableArray(out, defaultPhotosArray);
+    }
+
+    private void restoreInstanceState(Bundle savedInstanceState){
+        Log.i(TAG, "on restore instance state");
+        defaultPhotosArray = Photos.getParcelableArray(savedInstanceState);
+        initGridViewAdapter();
+    }
 
     @Override
     public void onResume(){
@@ -64,9 +74,9 @@ public class ImagePresenterImpl implements ImagePresenter{
     public void onDestroy(){}
 
     @Override
-    public void requestImages(String request){
+    public void requestNetworkPhotos(String request){
         //view.showloadingIndicator  -- HomeFragment will implement our view interface and override this method
-        Log.i(TAG, "Images Requested Event!");
+       // Log.i(TAG, "Images Requested Event!");
         bus.post(new ImagesRequestedEvent(request));  //this will notify our ApiRequestHandler
     }
 
@@ -74,7 +84,7 @@ public class ImagePresenterImpl implements ImagePresenter{
     public void onImagesArrayReceived(ImagesReceivedEvent event){
         Log.i(TAG, "array ready for presenter");
         this.defaultPhotosArray.setPhotos(event.getResult());
-        initAdapter();
+        initGridViewAdapter();
     }
 
     private void initInstanceState(){
@@ -94,7 +104,7 @@ public class ImagePresenterImpl implements ImagePresenter{
         });
     }
 
-    private void initAdapter(){
+    private void initGridViewAdapter(){
         //to-do : determine which photosArray to use (cached / network?)
         view.setGridViewAdapter(new PhotoAdapter(view.getContext(), defaultPhotosArray.getPhotos(), mResponseHandler));
     }

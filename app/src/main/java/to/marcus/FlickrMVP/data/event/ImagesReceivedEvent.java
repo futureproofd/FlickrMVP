@@ -2,7 +2,7 @@ package to.marcus.FlickrMVP.data.event;
 
 import android.util.Log;
 import java.util.ArrayList;
-import to.marcus.FlickrMVP.model.Photos.Photo;
+import to.marcus.FlickrMVP.model.Photo;
 
 /**
  * Created by marcus on 22/04/15.

@@ -13,7 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.R;
-import to.marcus.FlickrMVP.model.Photos.Photo;
+import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.modules.PresenterModule;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
@@ -38,11 +38,14 @@ public class HomeFragment extends BaseFragment implements PhotosView {
     //Get BaseFragment scoped ObjectGraph
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        Log.i(TAG, " created");
+        setRetainInstance(true);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "on activity created");
         presenter.onActivityCreated(savedInstanceState);
     }
 
@@ -57,6 +60,7 @@ public class HomeFragment extends BaseFragment implements PhotosView {
     @Override
     public void onResume(){
         super.onResume();
+        Log.i(TAG, "on resume");
         //get bus
         presenter.onResume();
     }
@@ -64,6 +68,7 @@ public class HomeFragment extends BaseFragment implements PhotosView {
     @Override
     public void onPause(){
         super.onPause();
+        Log.i(TAG, "on pause");
         //destroy bus
         presenter.onPause();
     }
@@ -71,13 +76,23 @@ public class HomeFragment extends BaseFragment implements PhotosView {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        mResponseHandler.quit();
+        Log.i(TAG, "on destroy");
+        //mResponseHandler.quit();
     }
+
 
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        mResponseHandler.clearQueue();
+        Log.i(TAG, "on destroy view");
+        //mResponseHandler.clearQueue();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle out){
+        super.onSaveInstanceState(out);
+        presenter.onSaveInstanceState(out);
+        Log.i(TAG, "on save instance state");
     }
 
     //BaseFragment

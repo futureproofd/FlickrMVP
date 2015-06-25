@@ -3,7 +3,7 @@ package to.marcus.FlickrMVP.ui.presenter;
 import android.os.Bundle;
 
 /**
- * Created by mplienegger on 6/8/2015.
+ * Created by marcus on 6/8/2015
  */
 public interface ImagePresenter {
 
@@ -19,5 +19,5 @@ public interface ImagePresenter {
 
     public void onRefresh();
 
-    public void requestImages(String s);
+    public void requestNetworkPhotos(String s);
 }

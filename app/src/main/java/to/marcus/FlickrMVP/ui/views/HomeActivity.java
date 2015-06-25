@@ -21,25 +21,16 @@ public class HomeActivity extends ActionBarActivity implements HomeView{
     public SlidingTabLayout mSlidingTabLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initHomeViewPager();
         initSlidingTabs();
         initToolBar();
-        /*
-        if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, HomeFragment.newInstance())
-                    .commit();
-        }
-        */
     }
 
-
     @Override
-    public void initHomeViewPager() {
+    public void initHomeViewPager(){
         mHomePagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager)findViewById(R.id.homeViewPager);
         mViewPager.setAdapter(mHomePagerAdapter);

@@ -6,7 +6,7 @@ import com.squareup.otto.Subscribe;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import to.marcus.FlickrMVP.model.ImageResponse;
+import to.marcus.FlickrMVP.model.PhotosResponse;
 import to.marcus.FlickrMVP.network.ApiService;
 
 /**
@@ -35,10 +35,10 @@ public class ApiRequestHandler{
                 "url_s",
                 "json",
                 "1",
-                new Callback<ImageResponse>() {
+                new Callback<PhotosResponse>() {
                     @Override
-                    public void success(ImageResponse imageResponse, Response response) {
-                        bus.post(new ImagesReceivedEvent(imageResponse.getPhotosObject().getPhotos()));
+                    public void success(PhotosResponse photosResponse, Response response) {
+                        bus.post(new ImagesReceivedEvent(photosResponse.getPhotosObject().getPhotos()));
                     }
 
                     @Override
