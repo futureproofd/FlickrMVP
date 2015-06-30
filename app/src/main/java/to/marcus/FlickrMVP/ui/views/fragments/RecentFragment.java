@@ -1,4 +1,4 @@
-package to.marcus.FlickrMVP.ui.views;
+package to.marcus.FlickrMVP.ui.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,34 +11,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
+import to.marcus.FlickrMVP.modules.RecentModule;
+import to.marcus.FlickrMVP.ui.presenter.RecentPresenter;
+import to.marcus.FlickrMVP.ui.views.PhotosView;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
-import to.marcus.FlickrMVP.modules.PresenterModule;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
-import to.marcus.FlickrMVP.ui.presenter.ImagePresenter;
 
 /**
  * Created by marcus on 31/03/15!
  */
 
-public class HomeFragment extends BaseFragment implements PhotosView {
-    private final String TAG = HomeFragment.class.getSimpleName();
+public class RecentFragment extends BaseFragment implements PhotosView {
+    private final String TAG = RecentFragment.class.getSimpleName();
     GridView mGridView;
     ArrayList<Photo> receivedPhotosList;
-    @Inject ImagePresenter presenter;
+    @Inject
+    RecentPresenter recentPresenter;
     PhotoHandler mResponseHandler;
 
-    public static HomeFragment newInstance(){
-        return new HomeFragment();
+    public static RecentFragment newInstance(){
+        return new RecentFragment();
     }
 
     @Override
     //Get BaseFragment scoped ObjectGraph
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        Log.i(TAG, " created");
+        Log.i(TAG, "on create");
         setRetainInstance(true);
     }
 
@@ -46,7 +48,7 @@ public class HomeFragment extends BaseFragment implements PhotosView {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "on activity created");
-        presenter.onActivityCreated(savedInstanceState);
+        recentPresenter.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -62,7 +64,7 @@ public class HomeFragment extends BaseFragment implements PhotosView {
         super.onResume();
         Log.i(TAG, "on resume");
         //get bus
-        presenter.onResume();
+        recentPresenter.onResume();
     }
 
     @Override
@@ -70,7 +72,7 @@ public class HomeFragment extends BaseFragment implements PhotosView {
         super.onPause();
         Log.i(TAG, "on pause");
         //destroy bus
-        presenter.onPause();
+        recentPresenter.onPause();
     }
 
     @Override
@@ -91,7 +93,7 @@ public class HomeFragment extends BaseFragment implements PhotosView {
     @Override
     public void onSaveInstanceState(Bundle out){
         super.onSaveInstanceState(out);
-        presenter.onSaveInstanceState(out);
+        recentPresenter.onSaveInstanceState(out);
         Log.i(TAG, "on save instance state");
     }
 
@@ -99,7 +101,7 @@ public class HomeFragment extends BaseFragment implements PhotosView {
     @Override
     public List<Object> getModules(){
         return Arrays.<Object>asList(
-                new PresenterModule(this)
+                new RecentModule(this)
         );
     }
 
@@ -113,7 +115,7 @@ public class HomeFragment extends BaseFragment implements PhotosView {
 
     @Override
     public void setPhotos(ArrayList<Photo> images) {
-        Log.i(TAG, "array received via presenter");
+        Log.i(TAG, "array received via Presenter");
         this.receivedPhotosList = images;
     }
 

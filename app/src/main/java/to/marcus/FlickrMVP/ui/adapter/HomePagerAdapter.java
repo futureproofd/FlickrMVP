@@ -3,7 +3,8 @@ package to.marcus.FlickrMVP.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import to.marcus.FlickrMVP.ui.views.HomeFragment;
+import to.marcus.FlickrMVP.ui.views.fragments.RecentFragment;
+import to.marcus.FlickrMVP.ui.views.fragments.SearchFragment;
 
 /**
  * For MainActivity navigation between fragments
@@ -23,11 +24,11 @@ public class HomePagerAdapter extends FragmentPagerAdapter{
     public Fragment getItem(int position) {
         switch(position){
             case RECENT_POSITION:
-                return new HomeFragment();
+                return new RecentFragment();
             case SEARCH_POSITION:
-                return new HomeFragment();
+                return new SearchFragment();
             case HISTORY_POSITION:
-                return new HomeFragment();
+                return new RecentFragment();
         }
         return null;
     }

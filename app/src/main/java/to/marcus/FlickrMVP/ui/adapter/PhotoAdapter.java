@@ -57,7 +57,7 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
             view = mLayoutInflater.inflate(R.layout.photo_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.imageView = (ImageView) view.findViewById(R.id.photo_item_imageView);
-            viewHolder.imageView.setImageResource(R.drawable.ic_launcher);
+            viewHolder.imageView.setImageResource(R.drawable.abc_item_background_holo_dark);
             view.setTag(viewHolder);
             Photo photo = getItem(position);
             mPhotoHandler.queueThumbnail(viewHolder.imageView, photo.getUrl());

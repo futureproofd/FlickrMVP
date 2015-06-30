@@ -5,7 +5,7 @@ import android.os.Bundle;
 /**
  * Created by marcus on 6/8/2015
  */
-public interface ImagePresenter {
+public interface RecentPresenter {
 
     public void onActivityCreated(Bundle savedInstanceState);
 
@@ -19,5 +19,5 @@ public interface ImagePresenter {
 
     public void onRefresh();
 
-    public void requestNetworkPhotos(String s);
+    public void requestNetworkPhotos();
 }

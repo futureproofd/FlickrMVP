@@ -1,19 +1,19 @@
-package to.marcus.FlickrMVP.ui.views;
+package to.marcus.FlickrMVP.ui.views.activity;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
+import to.marcus.FlickrMVP.ui.views.HomeView;
 import to.marcus.FlickrMVP.ui.views.supportwidgets.SlidingTabLayout;
 
 /**
  * Created by marcus on 23/03/15
  */
 
-public class HomeActivity extends ActionBarActivity implements HomeView{
+public class HomeActivity extends ActionBarActivity implements HomeView {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private HomePagerAdapter mHomePagerAdapter;
     public ViewPager mViewPager;
@@ -23,7 +23,7 @@ public class HomeActivity extends ActionBarActivity implements HomeView{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.toolbar_main);
         initHomeViewPager();
         initSlidingTabs();
         initToolBar();
@@ -40,7 +40,7 @@ public class HomeActivity extends ActionBarActivity implements HomeView{
     public void initToolBar(){
         mToolBar = (Toolbar)findViewById(R.id.homeToolbar);
         setSupportActionBar(mToolBar);
-
+        mToolBar.inflateMenu(R.menu.action);
     }
 
     @Override

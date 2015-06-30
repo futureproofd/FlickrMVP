@@ -56,6 +56,8 @@ public class PhotoHandler<Token> extends HandlerThread {
     private void handleRequest(final Token token){
         try{
             final String url = requestMap.get(token);
+            // add some LRU Caching here:
+                //Get photo ID instead of URL . If photoID exists in cache, getBytes or bitmap object
             if(url == null)
                 return;
             //decode bytes into bitmap from URL
@@ -69,6 +71,7 @@ public class PhotoHandler<Token> extends HandlerThread {
                    if(requestMap.get(token) != url)
                        return;
                    requestMap.remove(token);
+                   // pass in either LRU cache or decoded byte array here
                    mListener.onPhotoDownloaded(token, bitmap);
                }
             });

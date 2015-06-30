@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">FlickrMVP</string>
     <string name="api_key">4b37ee018d17b1aa7cd793ede2ea7ee7</string>
+    <string name="search">Search Flickr</string>
+    <string name="clear_results">Clear Search</string>
+    <string name="search_hint">Search Flickr</string>
 </resources>

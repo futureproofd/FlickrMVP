@@ -7,38 +7,36 @@ import android.util.Log;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import to.marcus.FlickrMVP.data.PhotoFactory;
-import to.marcus.FlickrMVP.data.event.ImagesReceivedEvent;
-import to.marcus.FlickrMVP.data.event.ImagesRequestedEvent;
+import to.marcus.FlickrMVP.data.event.SearchReceivedEvent;
+import to.marcus.FlickrMVP.data.event.SearchRequestedEvent;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 /**
-* Created by marcus on 15/04/15
-*/
+ * Created by marcus on 6/26/2015
+ */
 
-public class ImagePresenterImpl implements ImagePresenter{
-    private final String TAG = ImagePresenterImpl.class.getSimpleName();
+public class SearchPresenterImpl implements SearchPresenter {
+    private final String TAG = SearchPresenterImpl.class.getSimpleName();
     private final Bus bus;
     private PhotosView view;
     private Photos defaultPhotosArray;
     PhotoHandler mResponseHandler;
 
-    public ImagePresenterImpl(PhotosView view, Bus bus){
+    public SearchPresenterImpl(PhotosView view, Bus bus) {
         this.bus = bus;
         this.view = view;
         initResponseHandler();
     }
 
-    //to-do
     @Override
-    public void onActivityCreated(Bundle savedInstanceState){
+    public void onActivityCreated(Bundle savedInstanceState) {
         Log.i(TAG, "on activity created");
         if(savedInstanceState == null){
             //view.showprogressbar
             initInstanceState();
-            requestNetworkPhotos("search term");
         }else{
             //pullImagesFromCache --need to setup LRU
             restoreInstanceState(savedInstanceState);
@@ -46,7 +44,7 @@ public class ImagePresenterImpl implements ImagePresenter{
     }
 
     @Override
-    public void onSaveInstanceState(Bundle out){
+    public void onSaveInstanceState(Bundle out) {
         Log.i(TAG, "on save instance state");
         Photos.putParcelableArray(out, defaultPhotosArray);
     }
@@ -58,31 +56,29 @@ public class ImagePresenterImpl implements ImagePresenter{
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         bus.register(this);
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         bus.unregister(this);
     }
 
     @Override
-    public void onRefresh(){}
+    public void onDestroy() {}
 
     @Override
-    public void onDestroy(){}
+    public void onRefresh() {}
 
     @Override
-    public void requestNetworkPhotos(String request){
-        //view.showloadingIndicator  -- HomeFragment will implement our view interface and override this method
-       // Log.i(TAG, "Images Requested Event!");
-        bus.post(new ImagesRequestedEvent(request));  //this will notify our ApiRequestHandler
+    public void requestNetworkPhotos(String query) {
+        bus.post(new SearchRequestedEvent(query));
     }
 
     @Subscribe
-    public void onImagesArrayReceived(ImagesReceivedEvent event){
-        Log.i(TAG, "array ready for presenter");
+    public void onImagesArrayReceived(SearchReceivedEvent event){
+        Log.i(TAG, "On images received: array ready for presenter");
         this.defaultPhotosArray.setPhotos(event.getResult());
         initGridViewAdapter();
     }
@@ -91,7 +87,8 @@ public class ImagePresenterImpl implements ImagePresenter{
         defaultPhotosArray = PhotoFactory.Photos.initDefaultPhotosArray();
     }
 
-    private void initResponseHandler(){
+
+    private void initResponseHandler() {
         mResponseHandler = new PhotoHandler<android.widget.ImageView>(new Handler());
         mResponseHandler.start();
         mResponseHandler.getLooper();
@@ -108,5 +105,4 @@ public class ImagePresenterImpl implements ImagePresenter{
         //to-do : determine which photosArray to use (cached / network?)
         view.setGridViewAdapter(new PhotoAdapter(view.getContext(), defaultPhotosArray.getPhotos(), mResponseHandler));
     }
-
 }

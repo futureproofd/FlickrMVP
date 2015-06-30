@@ -11,7 +11,7 @@ import to.marcus.FlickrMVP.model.PhotosResponse;
 
 public interface ApiService {
 
-    String method = "flickr.photos.getRecent";
+    //String method = "flickr.photos.getRecent";
     static final String API_KEY = "4b37ee018d17b1aa7cd793ede2ea7ee7";
     static final String EXTRA_SMALL_URL = "url_s";
 
@@ -19,6 +19,16 @@ public interface ApiService {
     void getRecent(@Query("method") String method,
                    @Query("api_key") String API_KEY,
                    @Query("extras") String EXTRA_SMALL_URL,
+                   @Query("format") String format,
+                   @Query("nojsoncallback") String set,
+                   Callback<PhotosResponse> callback
+    );
+
+    @GET("/rest/")
+    void getSearch(@Query("method")String method,
+                   @Query("api_key") String API_KEY,
+                   @Query("extras") String EXTRA_SMALL_URL,
+                   @Query("text") String SEARCH_TERM,
                    @Query("format") String format,
                    @Query("nojsoncallback") String set,
                    Callback<PhotosResponse> callback

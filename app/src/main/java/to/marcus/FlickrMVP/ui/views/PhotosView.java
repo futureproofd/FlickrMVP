@@ -1,7 +1,6 @@
 package to.marcus.FlickrMVP.ui.views;
 
 import java.util.ArrayList;
-
 import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 
