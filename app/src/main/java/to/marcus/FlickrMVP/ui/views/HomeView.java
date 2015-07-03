@@ -5,8 +5,9 @@ package to.marcus.FlickrMVP.ui.views;
  * Methods to be implemented to get view structure
  */
 
-public interface HomeView {
+public interface HomeView extends BaseContextView {
    public void initHomeViewPager();
    public void initToolBar();
    public void initSlidingTabs();
+   public void initSearchBox();
 }

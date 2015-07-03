@@ -64,7 +64,7 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.action, menu);
+        inflater.inflate(R.menu.actionbar_default, menu);
     }
 
     @Override

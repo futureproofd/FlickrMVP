@@ -4,4 +4,7 @@
     <string name="search">Search Flickr</string>
     <string name="clear_results">Clear Search</string>
     <string name="search_hint">Search Flickr</string>
+    <string name="fragment_recent">Recent</string>
+    <string name="fragment_search">Search</string>
+    <string name="fragment_history">History</string>
 </resources>
