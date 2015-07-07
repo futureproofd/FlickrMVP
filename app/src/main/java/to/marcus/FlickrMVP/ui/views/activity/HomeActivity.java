@@ -46,8 +46,8 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
      */
     @Override
     public void initHomeViewPager() {
-        mHomePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), getContext());
         mViewPager = (ViewPager) findViewById(R.id.homeViewPager);
+        mHomePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), getContext());
         mViewPager.setAdapter(mHomePagerAdapter);
     }
 
@@ -55,16 +55,15 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public void initToolBar() {
         mToolBar = (Toolbar) findViewById(R.id.homeToolbar);
         mToolBar.setTitleTextAppearance(this, R.style.ToolBarTextStyle);
-        mToolBar.setLogo(R.drawable.ic_camera);
+        mToolBar.setLogo(R.drawable.camera_logo);
         setSupportActionBar(mToolBar);
-        //mToolBar.inflateMenu(R.menu.actionbar_default);
         setToolbarTitle(mViewPager.getCurrentItem());
     }
 
     @Override
     public void initSlidingTabs() {
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.homeSlidingTabs);
-        mSlidingTabLayout.setCustomTabView(R.layout.tab_layout, android.R.id.text1);
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_layout, R.id.tab_text);
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
@@ -149,6 +148,5 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public Context getContext(){
         return this.getApplicationContext();
     }
-
 }
 

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="?android:actionBarSize"
-    android:padding="@dimen/abc_action_button_min_height_material"
-    android:gravity="center"
-    android:textSize="12sp"
-    android:textStyle="bold"
-    android:background="?android:selectableItemBackground"
-    android:id="@android:id/text1">
-</TextView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tab_text"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:actionBarSize"
+        android:background="?android:selectableItemBackground"
+        android:gravity="center"
+    />
+
+</LinearLayout>

@@ -9,7 +9,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
-
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.ui.views.fragments.RecentFragment;
 import to.marcus.FlickrMVP.ui.views.fragments.SearchFragment;
@@ -50,13 +49,14 @@ public class HomePagerAdapter extends FragmentPagerAdapter{
     }
 
     private int[] imageResId = {
-            R.drawable.ic_camera,
+            R.drawable.ic_brightness_5,
             R.drawable.ic_magnify,
-            R.drawable.abc_ic_go_search_api_mtrl_alpha
+            R.drawable.ic_history
     };
 
     @Override
     public CharSequence getPageTitle(int position) {
+
         Drawable image = context.getResources().getDrawable(imageResId[position]);
         image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
         SpannableString sb = new SpannableString(" ");
@@ -64,5 +64,8 @@ public class HomePagerAdapter extends FragmentPagerAdapter{
         Log.i(TAG, "Set image per tab " + imageResId);
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
+
+
+        //return "Item " + (position + 1);
     }
 }

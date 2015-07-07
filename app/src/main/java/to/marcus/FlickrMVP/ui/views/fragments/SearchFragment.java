@@ -71,7 +71,7 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.search_item:
-                searchPresenter.requestNetworkPhotos("sexy woman");
+                searchPresenter.requestNetworkPhotos("red Ferarri");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
