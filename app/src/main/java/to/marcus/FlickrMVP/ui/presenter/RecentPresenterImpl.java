@@ -4,8 +4,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.LruCache;
+
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
+import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.ImagesReceivedEvent;
 import to.marcus.FlickrMVP.data.event.ImagesRequestedEvent;
@@ -20,12 +24,14 @@ import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 public class RecentPresenterImpl implements RecentPresenter {
     private final String TAG = RecentPresenterImpl.class.getSimpleName();
+    private PhotoCache photoCache;
     private final Bus bus;
     private PhotosView view;
     private Photos defaultPhotosArray;
     PhotoHandler mResponseHandler;
 
-    public RecentPresenterImpl(PhotosView view, Bus bus){
+    public RecentPresenterImpl(PhotosView view, Bus bus, PhotoCache photoCache){
+        this.photoCache = photoCache;
         this.bus = bus;
         this.view = view;
         initResponseHandler();
@@ -89,10 +95,13 @@ public class RecentPresenterImpl implements RecentPresenter {
 
     private void initInstanceState(){
         defaultPhotosArray = PhotoFactory.Photos.initDefaultPhotosArray();
+            //get cached image array
+            //initGridViewAdapter
+        //if not, requestNetworkPhotos();
     }
 
     private void initResponseHandler(){
-        mResponseHandler = new PhotoHandler<android.widget.ImageView>(new Handler());
+        mResponseHandler = new PhotoHandler<android.widget.ImageView>(new Handler(), photoCache);
         mResponseHandler.start();
         mResponseHandler.getLooper();
         //listen for incoming images sent back to main handler thread

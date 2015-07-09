@@ -4,6 +4,7 @@ import com.squareup.otto.Bus;
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
+import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.ui.presenter.RecentPresenter;
 import to.marcus.FlickrMVP.ui.presenter.RecentPresenterImpl;
 import to.marcus.FlickrMVP.ui.views.fragments.RecentFragment;
@@ -33,7 +34,7 @@ public class RecentModule {
     }
 
     @Provides @Singleton
-    public RecentPresenter provideImagePresenter(PhotosView photosView, Bus bus){
-        return new RecentPresenterImpl(photosView, bus);
+    public RecentPresenter provideImagePresenter(PhotosView photosView, Bus bus, PhotoCache photoCache){
+        return new RecentPresenterImpl(photosView, bus, photoCache);
     }
 }

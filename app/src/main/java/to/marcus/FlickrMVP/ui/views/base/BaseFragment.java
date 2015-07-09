@@ -18,7 +18,8 @@ public abstract class BaseFragment extends Fragment {
 
     private ObjectGraph mObjectGraph;
 
-    @Override public void onActivityCreated(Bundle savedInstanceState){
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         mObjectGraph = BaseApplication.get(getActivity()).createScopedGraph(getModules().toArray());
         mObjectGraph.inject(this);

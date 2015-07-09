@@ -10,7 +10,6 @@ import to.marcus.FlickrMVP.model.PhotosResponse;
  */
 
 public interface ApiService {
-
     //String method = "flickr.photos.getRecent";
     static final String API_KEY = "4b37ee018d17b1aa7cd793ede2ea7ee7";
     static final String EXTRA_SMALL_URL = "url_s";

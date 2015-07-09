@@ -9,12 +9,10 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
-import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 
 /**
  * Created by marcus on 5/11/2015
- *
  */
 
 public class PhotoAdapter extends ArrayAdapter<Photo> {
@@ -24,7 +22,7 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
     private final ArrayList<Photo> mPhotos;
     private ViewHolder viewHolder;
     PhotoHandler<ImageView> mPhotoHandler;
-    private static final String TAG = "PhotoAdapter";
+    private static final String TAG = PhotoAdapter.class.getSimpleName();
 
     public PhotoAdapter(Context context, ArrayList<Photo> photos, PhotoHandler handler){
         super(context, android.R.layout.simple_list_item_1, photos);
@@ -57,9 +55,10 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
             view = mLayoutInflater.inflate(R.layout.photo_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.imageView = (ImageView) view.findViewById(R.id.photo_item_imageView);
-            viewHolder.imageView.setImageResource(R.drawable.abc_item_background_holo_dark);
+            viewHolder.imageView.setImageResource(R.drawable.abc_item_background_holo_light);
             view.setTag(viewHolder);
             Photo photo = getItem(position);
+            //Start handler thread to get Bitmaps
             mPhotoHandler.queueThumbnail(viewHolder.imageView, photo.getUrl());
         }else{
             viewHolder = (ViewHolder)view.getTag();

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import to.marcus.FlickrMVP.data.PhotoCache;
 
 /**
  * Created by marcus on 5/12/2015
@@ -21,13 +22,15 @@ public class PhotoHandler<Token> extends HandlerThread {
     Handler mHandler;
     //passed from main thread: for communication back to the mainthread
     Handler mResponseHandler;
+    PhotoCache mPhotoCache;
     Listener<Token> mListener;
     Map<Token, String> requestMap = Collections.synchronizedMap(new HashMap<Token, String>());
 
     //get handler from main thread in constructor
-    public PhotoHandler(Handler responseHandler){
+    public PhotoHandler(Handler responseHandler, PhotoCache photoCache){
         super(TAG);
         mResponseHandler = responseHandler;
+        mPhotoCache = photoCache;
     }
 
     public interface Listener<Token>{
@@ -52,38 +55,44 @@ public class PhotoHandler<Token> extends HandlerThread {
         };
     }
 
-    //3.
+    //3. Cache or Network:
     private void handleRequest(final Token token){
         try{
             final String url = requestMap.get(token);
-            // add some LRU Caching here:
-                //Get photo ID instead of URL . If photoID exists in cache, getBytes or bitmap object
-            if(url == null)
-                return;
-            //decode bytes into bitmap from URL
-            byte[] bitmapBytes = new GetBytes().getUrlBytes(url);
-            final Bitmap bitmap = BitmapFactory
-                    .decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
-            //Log.i(TAG, "3. Bitmap created");
-
-            mResponseHandler.post(new Runnable(){
-               public void run(){
-                   if(requestMap.get(token) != url)
-                       return;
-                   requestMap.remove(token);
-                   // pass in either LRU cache or decoded byte array here
-                   mListener.onPhotoDownloaded(token, bitmap);
-               }
-            });
+            if(mPhotoCache.getBitmapFromCache(url) != null){
+                postPhotoRunnable(token, mPhotoCache.getBitmapFromCache(url), url);
+            }else {
+                //decode bytes into bitmap from URL
+                byte[] bitmapBytes = new GetBytes().getUrlBytes(url);
+                final Bitmap bitmap = BitmapFactory
+                        .decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
+                postPhotoRunnable(token, bitmap, url);
+                mPhotoCache.addBitmapToCache(url, bitmap);
+            }
         }catch (IOException ioe){
             Log.e(TAG, "Error dowloading image", ioe);
         }
     }
 
-    //1. add passed-in token URL pair to map, send to msgQueue
+    //4.
+    private void postPhotoRunnable(final Token token, final Bitmap bitmap, final String url){
+        mResponseHandler.post(new Runnable(){
+            public void run(){
+                if(requestMap.get(token) != url)
+                    return;
+                requestMap.remove(token);
+                //listen on presenter
+                mListener.onPhotoDownloaded(token, bitmap);
+            }
+        });
+    }
+
+    /*
+        1. add passed-in token URL pair to map, create a message
+         send to msgQueue
+     */
     public void queueThumbnail(Token token, String url){
         requestMap.put(token, url);
-        //create message
         mHandler.obtainMessage(0, token).sendToTarget();
         //Log.i(TAG, "1. Got a URL: " + url);
     }

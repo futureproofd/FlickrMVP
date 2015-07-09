@@ -1,11 +1,14 @@
 package to.marcus.FlickrMVP.modules;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.LruCache;
 import com.squareup.otto.Bus;
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
+import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.ui.views.base.BaseApplication;
 import to.marcus.FlickrMVP.network.ApiEndpoint;
 import to.marcus.FlickrMVP.network.ApiService;
@@ -17,15 +20,22 @@ import to.marcus.FlickrMVP.network.ApiService;
 
 @Module(
         injects = BaseApplication.class
-)
+       )
 
 public class ApplicationModule {
 
     private final String apiKey;
+    //Get max available memory, stored in KB
+    private final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+    private final int cacheSize = maxMemory / 16;
 
     public ApplicationModule(String apiKey) {
         this.apiKey = apiKey;
     }
+
+    @Provides
+    @Singleton
+    public PhotoCache provideCache(){return new PhotoCache();}
 
     @Provides
     @Singleton

@@ -3,6 +3,7 @@ package to.marcus.FlickrMVP.ui.views.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
+
+import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.modules.RecentModule;
 import to.marcus.FlickrMVP.ui.presenter.RecentPresenter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
@@ -30,6 +33,8 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     ArrayList<Photo> receivedPhotosList;
     @Inject
     RecentPresenter recentPresenter;
+    @Inject
+    PhotoCache photosCache;
     PhotoHandler mResponseHandler;
 
     public static RecentFragment newInstance(){

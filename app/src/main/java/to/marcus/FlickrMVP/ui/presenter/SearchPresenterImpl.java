@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.util.Log;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
+import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.SearchReceivedEvent;
 import to.marcus.FlickrMVP.data.event.SearchRequestedEvent;
@@ -20,12 +22,14 @@ import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 public class SearchPresenterImpl implements SearchPresenter {
     private final String TAG = SearchPresenterImpl.class.getSimpleName();
+    private PhotoCache photoCache;
     private final Bus bus;
     private PhotosView view;
     private Photos defaultPhotosArray;
     PhotoHandler mResponseHandler;
 
-    public SearchPresenterImpl(PhotosView view, Bus bus) {
+    public SearchPresenterImpl(PhotosView view, Bus bus, PhotoCache photoCache) {
+        this.photoCache = photoCache;
         this.bus = bus;
         this.view = view;
         initResponseHandler();
@@ -89,7 +93,7 @@ public class SearchPresenterImpl implements SearchPresenter {
 
 
     private void initResponseHandler() {
-        mResponseHandler = new PhotoHandler<android.widget.ImageView>(new Handler());
+        mResponseHandler = new PhotoHandler<android.widget.ImageView>(new Handler(), photoCache);
         mResponseHandler.start();
         mResponseHandler.getLooper();
         //listen for incoming images sent back to main handler thread

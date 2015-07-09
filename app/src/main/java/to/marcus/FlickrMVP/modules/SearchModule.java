@@ -4,6 +4,7 @@ import com.squareup.otto.Bus;
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
+import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.ui.presenter.SearchPresenter;
 import to.marcus.FlickrMVP.ui.presenter.SearchPresenterImpl;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
@@ -33,7 +34,7 @@ public class SearchModule {
     }
 
     @Provides @Singleton
-    public SearchPresenter provideImagePresenter(PhotosView photosView, Bus bus){
-        return new SearchPresenterImpl(photosView, bus);
+    public SearchPresenter provideImagePresenter(PhotosView photosView, Bus bus, PhotoCache photoCache){
+        return new SearchPresenterImpl(photosView, bus, photoCache);
     }
 }
