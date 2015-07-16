@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.util.Log;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.SearchReceivedEvent;
@@ -37,24 +36,20 @@ public class SearchPresenterImpl implements SearchPresenter {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.i(TAG, "on activity created");
         if(savedInstanceState == null){
-            //view.showprogressbar
+            view.showProgressBar();
             initInstanceState();
         }else{
-            //pullImagesFromCache --need to setup LRU
             restoreInstanceState(savedInstanceState);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle out) {
-        Log.i(TAG, "on save instance state");
         Photos.putParcelableArray(out, defaultPhotosArray);
     }
 
     private void restoreInstanceState(Bundle savedInstanceState){
-        Log.i(TAG, "on restore instance state");
         defaultPhotosArray = Photos.getParcelableArray(savedInstanceState);
         initGridViewAdapter();
     }
@@ -82,9 +77,9 @@ public class SearchPresenterImpl implements SearchPresenter {
 
     @Subscribe
     public void onImagesArrayReceived(SearchReceivedEvent event){
-        Log.i(TAG, "On images received: array ready for presenter");
         this.defaultPhotosArray.setPhotos(event.getResult());
         initGridViewAdapter();
+        view.hideProgressBar();
     }
 
     private void initInstanceState(){

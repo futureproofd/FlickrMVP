@@ -10,4 +10,5 @@ public interface HomeView extends BaseContextView {
    public void initToolBar();
    public void initSlidingTabs();
    public void initSearchBox();
+   public void initProgressBar();
 }

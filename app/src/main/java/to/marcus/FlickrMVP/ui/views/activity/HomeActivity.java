@@ -9,12 +9,18 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 import to.marcus.FlickrMVP.ui.views.HomeView;
+import to.marcus.FlickrMVP.ui.views.fragments.SearchFragment;
 import to.marcus.FlickrMVP.ui.views.supportwidgets.SlidingTabLayout;
 
 /**
@@ -30,15 +36,17 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public SlidingTabLayout mSlidingTabLayout;
     public EditText mSearchBox;
     public ImageView mClearSearchButton;
+    public ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.toolbar_main);
+        setContentView(R.layout.toolbar_activity_main);
         initHomeViewPager();
         initSlidingTabs();
         initToolBar();
         initSearchBox();
+        initProgressBar();
     }
 
     /*
@@ -48,6 +56,7 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public void initHomeViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.homeViewPager);
         mHomePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), getContext());
+        mViewPager.setOffscreenPageLimit(mHomePagerAdapter.getCount()-1);
         mViewPager.setAdapter(mHomePagerAdapter);
     }
 
@@ -101,13 +110,12 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
         mSearchBox = (EditText) findViewById(R.id.toolbar_search_box);
         mSearchBox.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.i(TAG, "on text changed listener");
+
             }
 
             @Override
@@ -119,6 +127,26 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
             }
         });
 
+        //Submit search
+        mSearchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    SearchFragment searchFragment = (SearchFragment)getSupportFragmentManager()
+                            .findFragmentByTag(
+                                    "android:switcher:"
+                                            + mViewPager.getId()
+                                            + ":"
+                                            + mHomePagerAdapter.getItemId(1));
+                    searchFragment.onSearchReceived(mSearchBox.getText().toString());
+                    dismissKeyboard();
+                    return true;
+                }
+                return false;
+            }
+
+        });
+
         mClearSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +155,12 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
         });
     }
 
-    //Helper
+    @Override
+    public void initProgressBar(){
+        mProgressBar = (ProgressBar)findViewById(R.id.progress_bar_main);
+    }
+
+    //Helpers
     private void setToolbarTitle(int position) {
         switch(position){
             case HomePagerAdapter.RECENT_POSITION:
@@ -140,6 +173,16 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
                 getSupportActionBar().setTitle(R.string.fragment_history);
                 break;
         }
+    }
+
+    //Helpers
+    private void dismissKeyboard(){
+        InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mSearchBox.getWindowToken(),0);
+    }
+
+    public ProgressBar getProgressBar(){
+        return mProgressBar;
     }
 
     /*

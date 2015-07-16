@@ -3,20 +3,20 @@ package to.marcus.FlickrMVP.ui.views.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
-
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.modules.RecentModule;
 import to.marcus.FlickrMVP.ui.presenter.RecentPresenter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
+import to.marcus.FlickrMVP.ui.views.activity.HomeActivity;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
@@ -30,16 +30,13 @@ import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 public class RecentFragment extends BaseFragment implements PhotosView {
     private final String TAG = RecentFragment.class.getSimpleName();
     GridView mGridView;
+    ProgressBar mProgressBar;
     ArrayList<Photo> receivedPhotosList;
-    @Inject
-    RecentPresenter recentPresenter;
-    @Inject
-    PhotoCache photosCache;
+    @Inject RecentPresenter recentPresenter;
+    @Inject PhotoCache photosCache;
     PhotoHandler mResponseHandler;
 
-    public static RecentFragment newInstance(){
-        return new RecentFragment();
-    }
+    public static RecentFragment newInstance(){return new RecentFragment();}
 
     @Override
     //Get BaseFragment scoped ObjectGraph
@@ -52,7 +49,7 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "on activity created");
+        mProgressBar = ((HomeActivity)getActivity()).getProgressBar();
         recentPresenter.onActivityCreated(savedInstanceState);
     }
 
@@ -119,6 +116,16 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     }
 
     @Override
+    public void showProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
     public void setPhotos(ArrayList<Photo> images) {
         Log.i(TAG, "array received via Presenter");
         this.receivedPhotosList = images;
@@ -133,11 +140,5 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     public ArrayList<Photo> getPhotoArray(){
         return receivedPhotosList;
     }
-
-    //showloadingindicator()
-        //progressIndicator.setVisibility(Visible)
-
-    //shownoresultsfound
-        //showerror
 
 }

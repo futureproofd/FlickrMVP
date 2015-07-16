@@ -54,9 +54,9 @@ public class HomePagerAdapter extends FragmentPagerAdapter{
             R.drawable.ic_history
     };
 
+    //Set image in place of tab text
     @Override
     public CharSequence getPageTitle(int position) {
-
         Drawable image = context.getResources().getDrawable(imageResId[position]);
         image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
         SpannableString sb = new SpannableString(" ");
@@ -64,8 +64,6 @@ public class HomePagerAdapter extends FragmentPagerAdapter{
         Log.i(TAG, "Set image per tab " + imageResId);
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
-
-
-        //return "Item " + (position + 1);
     }
+
 }

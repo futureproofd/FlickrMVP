@@ -3,4 +3,5 @@
     <color name="toolBarPrimary">#3F51B5</color>
     <color name="toolBarDark">#303F9F</color>
     <color name="tabScroll">#F50057</color>
+    <color name="emptyGrid">#2B2B2B</color>
 </resources>

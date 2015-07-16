@@ -4,12 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +19,7 @@ import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 import to.marcus.FlickrMVP.ui.presenter.SearchPresenter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
+import to.marcus.FlickrMVP.ui.views.activity.HomeActivity;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 
 /**
@@ -28,28 +27,29 @@ import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
  */
 
 public class SearchFragment extends BaseFragment implements PhotosView{
-    private static final String TAG = SearchFragment.class.getSimpleName();
+    private  final String TAG = SearchFragment.class.getSimpleName();
+    ProgressBar mProgressBar;
     GridView mGridView;
     ArrayList<Photo> receivedPhotosList;
     @Inject
     SearchPresenter searchPresenter;
     PhotoHandler mResponseHandler;
 
-    public static SearchFragment newInstance(){return new SearchFragment();}
+    public static SearchFragment newInstance(){
+        return new SearchFragment();
+    }
 
     @Override
     //Get BaseFragment scoped ObjectGraph
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "on create");
         setRetainInstance(true);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "on activity created");
+        mProgressBar = ((HomeActivity)getActivity()).getProgressBar();
         searchPresenter.onActivityCreated(savedInstanceState);
     }
 
@@ -62,26 +62,8 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.actionbar_default, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.search_item:
-                searchPresenter.requestNetworkPhotos("red Ferarri");
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onResume(){
         super.onResume();
-        Log.i(TAG, "on resume");
         //get bus
         searchPresenter.onResume();
     }
@@ -89,7 +71,6 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     @Override
     public void onPause(){
         super.onPause();
-        Log.i(TAG, "on pause");
         //destroy bus
         searchPresenter.onPause();
     }
@@ -97,7 +78,6 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.i(TAG, "on destroy");
         //mResponseHandler.quit();
     }
 
@@ -105,15 +85,16 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     public void onSaveInstanceState(Bundle out){
         super.onSaveInstanceState(out);
         searchPresenter.onSaveInstanceState(out);
-        Log.i(TAG, "on save instance state");
     }
-
 
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        Log.i(TAG, "on destroy view");
         //mResponseHandler.clearQueue();
+    }
+
+    public void onSearchReceived(String searchTerm){
+        searchPresenter.requestNetworkPhotos(searchTerm);
     }
 
     //BaseFragment
@@ -133,8 +114,17 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     }
 
     @Override
+    public void showProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
     public void setPhotos(ArrayList<Photo> images) {
-        Log.i(TAG, "array received via recentPresenter");
         this.receivedPhotosList = images;
     }
 

@@ -3,12 +3,8 @@ package to.marcus.FlickrMVP.ui.presenter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.util.LruCache;
-
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.ImagesReceivedEvent;
@@ -40,25 +36,21 @@ public class RecentPresenterImpl implements RecentPresenter {
     //to-do
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
-        Log.i(TAG, "on activity created");
         if(savedInstanceState == null){
-            //view.showprogressbar
+            view.showProgressBar();
             initInstanceState();
             requestNetworkPhotos();
         }else{
-            //pullImagesFromCache --need to setup LRU
             restoreInstanceState(savedInstanceState);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle out){
-        Log.i(TAG, "on save instance state");
         Photos.putParcelableArray(out, defaultPhotosArray);
     }
 
     private void restoreInstanceState(Bundle savedInstanceState){
-        Log.i(TAG, "on restore instance state");
         defaultPhotosArray = Photos.getParcelableArray(savedInstanceState);
         initGridViewAdapter();
     }
@@ -81,23 +73,19 @@ public class RecentPresenterImpl implements RecentPresenter {
 
     @Override
     public void requestNetworkPhotos(){
-        //view.showloadingIndicator  -- HomeFragment will implement our view interface and override this method
-       // Log.i(TAG, "Images Requested Event!");
-        bus.post(new ImagesRequestedEvent());  //this will notify our ApiRequestHandler
+        //notify our ApiRequestHandler
+        bus.post(new ImagesRequestedEvent());
     }
 
     @Subscribe
     public void onImagesArrayReceived(ImagesReceivedEvent event){
-        Log.i(TAG, "array ready for presenter");
         this.defaultPhotosArray.setPhotos(event.getResult());
         initGridViewAdapter();
+        view.hideProgressBar();
     }
 
     private void initInstanceState(){
         defaultPhotosArray = PhotoFactory.Photos.initDefaultPhotosArray();
-            //get cached image array
-            //initGridViewAdapter
-        //if not, requestNetworkPhotos();
     }
 
     private void initResponseHandler(){
@@ -108,14 +96,16 @@ public class RecentPresenterImpl implements RecentPresenter {
         mResponseHandler.setListener(new PhotoHandler.Listener<android.widget.ImageView>() {
             public void onPhotoDownloaded(android.widget.ImageView imageView, Bitmap thumbnail) {
                 imageView.setImageBitmap(thumbnail);
-                Log.i(TAG, "ResponseHandler: imageview set thumbnail");
             }
         });
     }
 
     private void initGridViewAdapter(){
-        //to-do : determine which photosArray to use (cached / network?)
-        view.setGridViewAdapter(new PhotoAdapter(view.getContext(), defaultPhotosArray.getPhotos(), mResponseHandler));
+        view.setGridViewAdapter(
+                new PhotoAdapter(view.getContext()
+                ,defaultPhotosArray.getPhotos()
+                ,mResponseHandler)
+        );
     }
 
 }
