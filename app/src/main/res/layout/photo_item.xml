@@ -4,5 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType="centerCrop"
+    android:padding="2px"
     >
 </to.marcus.FlickrMVP.ui.views.GridViewItem>

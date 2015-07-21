@@ -29,4 +29,16 @@ public class PhotoCache{
     public Bitmap getBitmapFromCache(String key){
         return mPhotoCache.get(key);
     }
+
+    public boolean isCached(String key){
+        if(key != null) {
+            if (mPhotoCache.get(key) != null) {
+                return true;
+            } else {
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 }

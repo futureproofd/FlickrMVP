@@ -55,11 +55,11 @@ public class PhotoHandler<Token> extends HandlerThread {
         };
     }
 
-    //3. Cache or Network:
+    //3. Determine Cache or Network:
     private void handleRequest(final Token token){
         try{
             final String url = requestMap.get(token);
-            if(mPhotoCache.getBitmapFromCache(url) != null){
+            if(mPhotoCache.isCached(url)){
                 postPhotoRunnable(token, mPhotoCache.getBitmapFromCache(url), url);
             }else {
                 //decode bytes into bitmap from URL

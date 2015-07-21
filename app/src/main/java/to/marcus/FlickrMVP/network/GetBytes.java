@@ -15,7 +15,6 @@ public class GetBytes {
     public byte[] getUrlBytes(String urlStr) throws IOException{
         URL url = new URL(urlStr);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-
         try{
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             InputStream in = connection.getInputStream();

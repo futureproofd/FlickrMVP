@@ -21,13 +21,14 @@ import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 public class SearchPresenterImpl implements SearchPresenter {
     private final String TAG = SearchPresenterImpl.class.getSimpleName();
+    private String mSearchQuery;
     private PhotoCache photoCache;
     private final Bus bus;
     private PhotosView view;
     private Photos defaultPhotosArray;
     PhotoHandler mResponseHandler;
 
-    public SearchPresenterImpl(PhotosView view, Bus bus, PhotoCache photoCache) {
+    public SearchPresenterImpl(PhotosView view, Bus bus, PhotoCache photoCache){
         this.photoCache = photoCache;
         this.bus = bus;
         this.view = view;
@@ -35,13 +36,13 @@ public class SearchPresenterImpl implements SearchPresenter {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState){
         if(savedInstanceState == null){
-            view.showProgressBar();
             initInstanceState();
         }else{
             restoreInstanceState(savedInstanceState);
         }
+        view.initSwipeRefreshWidget();
     }
 
     @Override
@@ -55,23 +56,29 @@ public class SearchPresenterImpl implements SearchPresenter {
     }
 
     @Override
-    public void onResume() {
+    public void onResume(){
         bus.register(this);
     }
 
     @Override
-    public void onPause() {
+    public void onPause(){
         bus.unregister(this);
     }
 
     @Override
-    public void onDestroy() {}
+    public void onDestroy(){}
 
     @Override
-    public void onRefresh() {}
+    public void onRefresh(){
+        requestNetworkPhotos(mSearchQuery);
+    }
 
     @Override
-    public void requestNetworkPhotos(String query) {
+    public void requestNetworkPhotos(String query){
+        mSearchQuery = query;
+        if(!view.isSwipeRefreshing()){
+            view.showProgressBar();
+        }
         bus.post(new SearchRequestedEvent(query));
     }
 
@@ -79,6 +86,9 @@ public class SearchPresenterImpl implements SearchPresenter {
     public void onImagesArrayReceived(SearchReceivedEvent event){
         this.defaultPhotosArray.setPhotos(event.getResult());
         initGridViewAdapter();
+        if(view.isSwipeRefreshing()){
+            view.hideSwipeRefreshWidget();
+        }
         view.hideProgressBar();
     }
 
@@ -86,8 +96,7 @@ public class SearchPresenterImpl implements SearchPresenter {
         defaultPhotosArray = PhotoFactory.Photos.initDefaultPhotosArray();
     }
 
-
-    private void initResponseHandler() {
+    private void initResponseHandler(){
         mResponseHandler = new PhotoHandler<android.widget.ImageView>(new Handler(), photoCache);
         mResponseHandler.start();
         mResponseHandler.getLooper();
@@ -95,7 +104,6 @@ public class SearchPresenterImpl implements SearchPresenter {
         mResponseHandler.setListener(new PhotoHandler.Listener<android.widget.ImageView>() {
             public void onPhotoDownloaded(android.widget.ImageView imageView, Bitmap thumbnail) {
                 imageView.setImageBitmap(thumbnail);
-                Log.i(TAG, "ResponseHandler: imageview set thumbnail");
             }
         });
     }

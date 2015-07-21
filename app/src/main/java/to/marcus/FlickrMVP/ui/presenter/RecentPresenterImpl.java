@@ -37,12 +37,13 @@ public class RecentPresenterImpl implements RecentPresenter {
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         if(savedInstanceState == null){
-            view.showProgressBar();
             initInstanceState();
             requestNetworkPhotos();
+            view.showProgressBar();
         }else{
             restoreInstanceState(savedInstanceState);
         }
+        view.initSwipeRefreshWidget();
     }
 
     @Override
@@ -66,7 +67,9 @@ public class RecentPresenterImpl implements RecentPresenter {
     }
 
     @Override
-    public void onRefresh(){}
+    public void onRefresh(){
+        requestNetworkPhotos();
+    }
 
     @Override
     public void onDestroy(){}
@@ -81,6 +84,9 @@ public class RecentPresenterImpl implements RecentPresenter {
     public void onImagesArrayReceived(ImagesReceivedEvent event){
         this.defaultPhotosArray.setPhotos(event.getResult());
         initGridViewAdapter();
+        if(view.isSwipeRefreshing()){
+            view.hideSwipeRefreshWidget();
+        }
         view.hideProgressBar();
     }
 

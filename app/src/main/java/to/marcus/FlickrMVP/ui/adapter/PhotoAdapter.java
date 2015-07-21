@@ -13,6 +13,8 @@ import to.marcus.FlickrMVP.network.PhotoHandler;
 
 /**
  * Created by marcus on 5/11/2015
+ * Simple ArrayAdapter to hold images
+ * HandlerThread builds images from url portion of Array
  */
 
 public class PhotoAdapter extends ArrayAdapter<Photo> {
@@ -55,14 +57,14 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
             view = mLayoutInflater.inflate(R.layout.photo_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.imageView = (ImageView) view.findViewById(R.id.photo_item_imageView);
-            viewHolder.imageView.setImageResource(R.drawable.abc_item_background_holo_light);
+            //viewHolder.imageView.setPadding(3,3,3,3);
             view.setTag(viewHolder);
-            Photo photo = getItem(position);
-            //Start handler thread to get Bitmaps
-            mPhotoHandler.queueThumbnail(viewHolder.imageView, photo.getUrl());
         }else{
             viewHolder = (ViewHolder)view.getTag();
         }
+        Photo photo = getItem(position);
+        //Start handler thread to get Bitmaps
+        mPhotoHandler.queueThumbnail(viewHolder.imageView, photo.getUrl());
         return view;
     }
 }

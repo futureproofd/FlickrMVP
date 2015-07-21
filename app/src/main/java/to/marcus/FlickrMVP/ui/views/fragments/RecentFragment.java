@@ -2,6 +2,7 @@ package to.marcus.FlickrMVP.ui.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +32,9 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     private final String TAG = RecentFragment.class.getSimpleName();
     GridView mGridView;
     ProgressBar mProgressBar;
+    SwipeRefreshLayout mSwipeRefreshWidget;
     ArrayList<Photo> receivedPhotosList;
     @Inject RecentPresenter recentPresenter;
-    @Inject PhotoCache photosCache;
     PhotoHandler mResponseHandler;
 
     public static RecentFragment newInstance(){return new RecentFragment();}
@@ -42,7 +43,6 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     //Get BaseFragment scoped ObjectGraph
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "on create");
         setRetainInstance(true);
     }
 
@@ -58,13 +58,13 @@ public class RecentFragment extends BaseFragment implements PhotosView {
                                 Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_grid_layout, container, false);
         mGridView = (GridView)v.findViewById(R.id.gridView);
+        mSwipeRefreshWidget = (SwipeRefreshLayout)v.findViewById(R.id.swipe_refresh_main);
         return v;
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(TAG, "on resume");
         //get bus
         recentPresenter.onResume();
     }
@@ -72,7 +72,6 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public void onPause(){
         super.onPause();
-        Log.i(TAG, "on pause");
         //destroy bus
         recentPresenter.onPause();
     }
@@ -80,7 +79,6 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.i(TAG, "on destroy");
         //mResponseHandler.quit();
     }
 
@@ -88,7 +86,6 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        Log.i(TAG, "on destroy view");
         //mResponseHandler.clearQueue();
     }
 
@@ -96,7 +93,6 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     public void onSaveInstanceState(Bundle out){
         super.onSaveInstanceState(out);
         recentPresenter.onSaveInstanceState(out);
-        Log.i(TAG, "on save instance state");
     }
 
     //BaseFragment
@@ -126,8 +122,27 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     }
 
     @Override
+    public void initSwipeRefreshWidget(){
+        mSwipeRefreshWidget.setColorSchemeColors(R.color.tabScroll);
+        mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                recentPresenter.onRefresh();
+            }
+        });
+    }
+
+    @Override
+    public void showSwipeRefreshWidget(){mSwipeRefreshWidget.setRefreshing(true);}
+
+    @Override
+    public void hideSwipeRefreshWidget(){mSwipeRefreshWidget.setRefreshing(false);}
+
+    @Override
+    public boolean isSwipeRefreshing(){return mSwipeRefreshWidget.isRefreshing();}
+
+    @Override
     public void setPhotos(ArrayList<Photo> images) {
-        Log.i(TAG, "array received via Presenter");
         this.receivedPhotosList = images;
     }
 

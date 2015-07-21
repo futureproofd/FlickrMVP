@@ -12,6 +12,10 @@ public interface PhotosView extends BaseContextView {
     void setPhotos(ArrayList<Photo> images);
     public ArrayList<Photo> getPhotoArray();
     void setGridViewAdapter(PhotoAdapter adapter);
+    void initSwipeRefreshWidget();
     void showProgressBar();
     void hideProgressBar();
+    void showSwipeRefreshWidget();
+    void hideSwipeRefreshWidget();
+    boolean isSwipeRefreshing();
 }

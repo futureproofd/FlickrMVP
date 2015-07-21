@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -36,7 +37,9 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public SlidingTabLayout mSlidingTabLayout;
     public EditText mSearchBox;
     public ImageView mClearSearchButton;
+    //GUI Status Indicators
     public ProgressBar mProgressBar;
+    public SwipeRefreshLayout mSwipeRefreshWidget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
