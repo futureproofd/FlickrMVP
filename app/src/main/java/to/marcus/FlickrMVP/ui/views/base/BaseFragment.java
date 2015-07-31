@@ -2,11 +2,10 @@ package to.marcus.FlickrMVP.ui.views.base;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
 import java.util.Arrays;
 import java.util.List;
-
 import dagger.ObjectGraph;
+import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 
 /**
  * Created by marcus on 31/03/15.
@@ -15,8 +14,9 @@ import dagger.ObjectGraph;
 
 public abstract class BaseFragment extends Fragment {
     private static final String TAG = BaseFragment.class.getSimpleName();
-
     private ObjectGraph mObjectGraph;
+    protected HomePagerAdapter.FragmentChangeListener mListener;
+    private boolean mIsChildFragment;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
@@ -27,7 +27,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected List<Object> getModules(){
         return Arrays.<Object>asList(
-                //override this
+                //override from extension fragment
         );
     }
 
@@ -35,5 +35,13 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroy(){
         mObjectGraph = null;
         super.onDestroy();
+    }
+
+    public boolean isChildFragment(){
+        return mIsChildFragment;
+    }
+
+    public void setIsChildFragment(boolean showingChild){
+        mIsChildFragment = showingChild;
     }
 }

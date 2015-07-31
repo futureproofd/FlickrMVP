@@ -36,10 +36,22 @@ public class Photo implements Parcelable {
         this.isfamily = isfamily;
         this.url_s = url_s;
     }
-    //helpers
+    //helper methods:
     @Override
     public String toString(){return title;}
     public String getUrl(){return url_s;}
+    public String getBigUrl(){
+        return "https://farm"
+                +farm
+                +".staticflickr.com/"
+                +server
+                +"/"
+                +id
+                +"_"
+                +secret
+                +"_n.jpg"
+                ;
+        }
 
     /**
      * Parcelable methods

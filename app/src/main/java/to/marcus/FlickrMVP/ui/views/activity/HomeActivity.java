@@ -3,6 +3,7 @@ package to.marcus.FlickrMVP.ui.views.activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -12,6 +13,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -21,7 +23,9 @@ import android.widget.TextView;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 import to.marcus.FlickrMVP.ui.views.HomeView;
+import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.ui.views.fragments.SearchFragment;
+import to.marcus.FlickrMVP.ui.views.supportwidgets.DepthPageTransformer;
 import to.marcus.FlickrMVP.ui.views.supportwidgets.SlidingTabLayout;
 
 /**
@@ -37,7 +41,6 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public SlidingTabLayout mSlidingTabLayout;
     public EditText mSearchBox;
     public ImageView mClearSearchButton;
-    //GUI Status Indicators
     public ProgressBar mProgressBar;
     public SwipeRefreshLayout mSwipeRefreshWidget;
 
@@ -52,6 +55,28 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
         initProgressBar();
     }
 
+    //If back is called from a child fragment or a parent fragment
+    @Override
+    public void onBackPressed(){
+        Fragment fragment = (Fragment)getSupportFragmentManager()
+                .findFragmentByTag("android:switcher:"
+                        +mViewPager.getId()
+                        +":"
+                        +mViewPager.getCurrentItem()
+                );
+        if(fragment != null && fragment instanceof BaseFragment){
+            if(fragment.getView() != null){
+                BaseFragment bf = (BaseFragment)fragment;
+                if(bf.isChildFragment()){
+                    mViewPager.getCurrentItem();
+                    replaceChild(bf, mViewPager.getCurrentItem());
+                }else{
+                    finish();
+                }
+            }
+        }
+    }
+
     /*
     HomeView Implementations
      */
@@ -59,8 +84,9 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public void initHomeViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.homeViewPager);
         mHomePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), getContext());
-        mViewPager.setOffscreenPageLimit(mHomePagerAdapter.getCount()-1);
-        mViewPager.setAdapter(mHomePagerAdapter);
+        mViewPager.setOffscreenPageLimit(mHomePagerAdapter.getCount() - 1);
+        mViewPager.setPageTransformer(true, new DepthPageTransformer());
+                mViewPager.setAdapter(mHomePagerAdapter);
     }
 
     @Override
@@ -138,16 +164,16 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
                     SearchFragment searchFragment = (SearchFragment)getSupportFragmentManager()
                             .findFragmentByTag(
                                     "android:switcher:"
-                                            + mViewPager.getId()
-                                            + ":"
-                                            + mHomePagerAdapter.getItemId(1));
+                                    + mViewPager.getId()
+                                    + ":"
+                                    + mHomePagerAdapter.getItemId(1));
+                    View view = searchFragment.getView();
                     searchFragment.onSearchReceived(mSearchBox.getText().toString());
                     dismissKeyboard();
                     return true;
                 }
                 return false;
             }
-
         });
 
         mClearSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +189,9 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
         mProgressBar = (ProgressBar)findViewById(R.id.progress_bar_main);
     }
 
-    //Helpers
+    /*
+    Helpers
+     */
     private void setToolbarTitle(int position) {
         switch(position){
             case HomePagerAdapter.RECENT_POSITION:
@@ -178,14 +206,38 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
         }
     }
 
-    //Helpers
     private void dismissKeyboard(){
         InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mSearchBox.getWindowToken(),0);
+        imm.hideSoftInputFromWindow(mSearchBox.getWindowToken(), 0);
+    }
+
+    public void dismissToolBar(){
+        mToolBar.setVisibility(View.INVISIBLE);
+    }
+
+    public void dismissSlidingTabs(){
+        mSlidingTabLayout.setVisibility(View.INVISIBLE);
     }
 
     public ProgressBar getProgressBar(){
         return mProgressBar;
+    }
+
+    public void toggleFullScreen(){
+        if((getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0){
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        }else{
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    }
+
+    public void replaceChild(BaseFragment childFrg, int position){
+        toggleFullScreen();
+        mHomePagerAdapter.replaceChildFragment(childFrg, position);
+        mToolBar.setVisibility(View.VISIBLE);
+        mSlidingTabLayout.setVisibility(View.VISIBLE);
     }
 
     /*

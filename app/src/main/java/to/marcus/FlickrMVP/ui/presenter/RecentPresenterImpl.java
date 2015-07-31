@@ -11,6 +11,7 @@ import to.marcus.FlickrMVP.data.event.ImagesReceivedEvent;
 import to.marcus.FlickrMVP.data.event.ImagesRequestedEvent;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
+import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 
@@ -80,6 +81,11 @@ public class RecentPresenterImpl implements RecentPresenter {
         bus.post(new ImagesRequestedEvent());
     }
 
+    @Override
+    public void onNetworkPhotoSelected(String url){
+        view.showWebViewPhotoFragment(url);
+    }
+
     @Subscribe
     public void onImagesArrayReceived(ImagesReceivedEvent event){
         this.defaultPhotosArray.setPhotos(event.getResult());
@@ -99,7 +105,7 @@ public class RecentPresenterImpl implements RecentPresenter {
         mResponseHandler.start();
         mResponseHandler.getLooper();
         //listen for incoming images sent back to main handler thread
-        mResponseHandler.setListener(new PhotoHandler.Listener<android.widget.ImageView>() {
+        mResponseHandler.setListener(new PhotoHandler.Listener<android.widget.ImageView>(){
             public void onPhotoDownloaded(android.widget.ImageView imageView, Bitmap thumbnail) {
                 imageView.setImageBitmap(thumbnail);
             }

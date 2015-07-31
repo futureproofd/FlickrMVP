@@ -31,14 +31,10 @@ public class PhotoCache{
     }
 
     public boolean isCached(String key){
-        if(key != null) {
-            if (mPhotoCache.get(key) != null) {
+        if(key != null && mPhotoCache.get(key) != null){
                 return true;
             } else {
                 return false;
             }
-        }else{
-            return false;
-        }
     }
 }

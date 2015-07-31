@@ -7,4 +7,5 @@
     <string name="fragment_recent">Recent</string>
     <string name="fragment_search">Search</string>
     <string name="fragment_history">History</string>
+    <string name="large_photo">LARGE PHOTO</string>
 </resources>

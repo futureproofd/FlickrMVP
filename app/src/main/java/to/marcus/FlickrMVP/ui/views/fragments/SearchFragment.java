@@ -3,7 +3,6 @@ package to.marcus.FlickrMVP.ui.views.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import java.util.List;
 import javax.inject.Inject;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
-import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.modules.SearchModule;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
@@ -29,7 +27,7 @@ import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
  */
 
 public class SearchFragment extends BaseFragment implements PhotosView{
-    private  final String TAG = SearchFragment.class.getSimpleName();
+    private final String TAG = SearchFragment.class.getSimpleName();
     ProgressBar mProgressBar;
     SwipeRefreshLayout mSwipeRefreshWidget;
     GridView mGridView;
@@ -37,10 +35,6 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     @Inject
     SearchPresenter searchPresenter;
     PhotoHandler mResponseHandler;
-
-    public static SearchFragment newInstance(){
-        return new SearchFragment();
-    }
 
     @Override
     //Get BaseFragment scoped ObjectGraph
@@ -151,6 +145,11 @@ public class SearchFragment extends BaseFragment implements PhotosView{
 
     @Override
     public boolean isSwipeRefreshing(){return mSwipeRefreshWidget.isRefreshing();}
+
+    @Override
+    public void showWebViewPhotoFragment(String url) {
+
+    }
 
     @Override
     public void setPhotos(ArrayList<Photo> images) {

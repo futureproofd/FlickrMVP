@@ -57,7 +57,6 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
             view = mLayoutInflater.inflate(R.layout.photo_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.imageView = (ImageView) view.findViewById(R.id.photo_item_imageView);
-            //viewHolder.imageView.setPadding(3,3,3,3);
             view.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder)view.getTag();
