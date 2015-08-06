@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import to.marcus.FlickrMVP.data.PhotoCache;
@@ -12,7 +13,7 @@ import to.marcus.FlickrMVP.data.event.SearchReceivedEvent;
 import to.marcus.FlickrMVP.data.event.SearchRequestedEvent;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
-import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
+import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 /**
@@ -110,6 +111,16 @@ public class SearchPresenterImpl implements SearchPresenter {
 
     private void initGridViewAdapter(){
         //to-do : determine which photosArray to use (cached / network?)
-        view.setGridViewAdapter(new PhotoAdapter(view.getContext(), defaultPhotosArray.getPhotos(), mResponseHandler));
+        view.setGridViewAdapter(
+                new PhotoRecyclerAdapter(
+                view.getContext()
+                ,defaultPhotosArray.getPhotos()
+                ,mResponseHandler
+                ,new PhotoRecyclerAdapter.RecyclerViewItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        Log.i(TAG, "clicked position: "+position);
+                    }
+        }));
     }
 }

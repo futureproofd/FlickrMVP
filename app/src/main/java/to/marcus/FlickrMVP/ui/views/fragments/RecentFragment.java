@@ -2,17 +2,15 @@ package to.marcus.FlickrMVP.ui.views.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +18,7 @@ import java.util.List;
 import javax.inject.Inject;
 import to.marcus.FlickrMVP.modules.RecentModule;
 import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
+import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.presenter.RecentPresenter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 import to.marcus.FlickrMVP.ui.views.activity.HomeActivity;
@@ -27,7 +26,6 @@ import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.network.PhotoHandler;
-import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 
 /**
  * Created by marcus on 31/03/15
@@ -36,12 +34,15 @@ import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
 @SuppressLint("ValidFragment")
 public class RecentFragment extends BaseFragment implements PhotosView {
     private final String TAG = RecentFragment.class.getSimpleName();
-    GridView mGridView;
     ProgressBar mProgressBar;
     SwipeRefreshLayout mSwipeRefreshWidget;
     ArrayList<Photo> receivedPhotosList;
     @Inject RecentPresenter recentPresenter;
     PhotoHandler mResponseHandler;
+    RecyclerView.LayoutManager mLayoutManager;
+    RecyclerView mRecyclerView;
+    PhotoRecyclerAdapter mRecyclerAdapter;
+
 
     //factory
     public static RecentFragment newInstance(HomePagerAdapter.FragmentChangeListener listener){
@@ -58,14 +59,12 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     //Get BaseFragment scoped ObjectGraph
     public void onCreate(Bundle savedInstanceState){
-        Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
-        Log.i(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
         mProgressBar = ((HomeActivity)getActivity()).getProgressBar();
         recentPresenter.onActivityCreated(savedInstanceState);
@@ -74,9 +73,10 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewPagerContainer,
                                 Bundle savedInstanceState){
-        Log.i(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.fragment_grid_layout, viewPagerContainer, false);
-        mGridView = (GridView)v.findViewById(R.id.gridView);
+        mRecyclerView = (RecyclerView)v.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mSwipeRefreshWidget = (SwipeRefreshLayout)v.findViewById(R.id.swipe_refresh_main);
         return v;
     }
@@ -84,7 +84,6 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(TAG, "onResume");
         //get bus
         recentPresenter.onResume();
     }
@@ -92,7 +91,6 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public void onPause(){
         super.onPause();
-        Log.i(TAG, "onPause");
         //destroy bus
         recentPresenter.onPause();
     }
@@ -100,21 +98,18 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.i(TAG, "onDestroy");
         //mResponseHandler.quit();
     }
 
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        Log.i(TAG, "onDestroyView");
         //mResponseHandler.clearQueue();
     }
 
     @Override
     public void onSaveInstanceState(Bundle out){
         super.onSaveInstanceState(out);
-        Log.i(TAG, "onSaveInstanceState");
         recentPresenter.onSaveInstanceState(out);
     }
 
@@ -130,26 +125,19 @@ public class RecentFragment extends BaseFragment implements PhotosView {
      * View implementations
     */
     @Override
-    public void setGridViewAdapter(PhotoAdapter adapter){
-        mGridView.setAdapter(adapter);
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Photo photo =(Photo)mGridView.getAdapter().getItem(position);
-                recentPresenter.onNetworkPhotoSelected(photo.getBigUrl());
-            }
-        });
+    public void setGridViewAdapter(PhotoRecyclerAdapter adapter){
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerAdapter = adapter;
+        mRecyclerView.setItemViewCacheSize(6);
+        mLayoutManager = new GridLayoutManager(getContext(), 3);
+        mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
     @Override
-    public void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
+    public void showProgressBar(){mProgressBar.setVisibility(View.VISIBLE);}
 
     @Override
-    public void hideProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
+    public void hideProgressBar(){mProgressBar.setVisibility(View.GONE);}
 
     @Override
     public void initSwipeRefreshWidget(){
@@ -194,6 +182,11 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public ArrayList<Photo> getPhotoArray(){
         return receivedPhotosList;
+    }
+
+    @Override
+    public PhotoRecyclerAdapter getAdapter(){
+        return mRecyclerAdapter;
     }
 
 }

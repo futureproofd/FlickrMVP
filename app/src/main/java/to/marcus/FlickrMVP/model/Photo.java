@@ -49,7 +49,7 @@ public class Photo implements Parcelable {
                 +id
                 +"_"
                 +secret
-                +"_n.jpg"
+                +"_c.jpg"
                 ;
         }
 

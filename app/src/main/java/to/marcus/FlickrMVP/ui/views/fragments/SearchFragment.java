@@ -3,10 +3,11 @@ package to.marcus.FlickrMVP.ui.views.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.modules.SearchModule;
 import to.marcus.FlickrMVP.network.PhotoHandler;
-import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
+import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.presenter.SearchPresenter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 import to.marcus.FlickrMVP.ui.views.activity.HomeActivity;
@@ -30,11 +31,12 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     private final String TAG = SearchFragment.class.getSimpleName();
     ProgressBar mProgressBar;
     SwipeRefreshLayout mSwipeRefreshWidget;
-    GridView mGridView;
     ArrayList<Photo> receivedPhotosList;
     @Inject
     SearchPresenter searchPresenter;
     PhotoHandler mResponseHandler;
+    RecyclerView.LayoutManager mLayoutManager;
+    RecyclerView mRecyclerView;
 
     @Override
     //Get BaseFragment scoped ObjectGraph
@@ -54,7 +56,7 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_grid_layout, container, false);
-        mGridView = (GridView)v.findViewById(R.id.gridView);
+        mRecyclerView = (RecyclerView)v.findViewById(R.id.my_recycler_view);
         mSwipeRefreshWidget = (SwipeRefreshLayout)v.findViewById(R.id.swipe_refresh_main);
         return v;
     }
@@ -108,8 +110,10 @@ public class SearchFragment extends BaseFragment implements PhotosView{
      * View implementations
      */
     @Override
-    public void setGridViewAdapter(PhotoAdapter adapter){
-        mGridView.setAdapter(adapter);
+    public void setGridViewAdapter(PhotoRecyclerAdapter adapter){
+        mLayoutManager = new GridLayoutManager(getContext(), 3);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -164,6 +168,11 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     @Override
     public ArrayList<Photo> getPhotoArray(){
         return receivedPhotosList;
+    }
+
+    @Override
+    public PhotoRecyclerAdapter getAdapter(){
+        return null;
     }
 
 }

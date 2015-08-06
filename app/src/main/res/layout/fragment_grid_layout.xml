@@ -6,15 +6,12 @@
     android:layout_height="match_parent"
     android:id="@+id/swipe_refresh_main">
 
-<GridView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/gridView"
-    android:verticalSpacing="0dp"
-    android:horizontalSpacing="0dp"
-    android:stretchMode="columnWidth"
-    android:numColumns="3"
-    android:background="@color/emptyGrid"
-    >
-</GridView>
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/my_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        />
+
 </android.support.v4.widget.SwipeRefreshLayout>

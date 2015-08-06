@@ -3,16 +3,17 @@ package to.marcus.FlickrMVP.ui.presenter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.ImagesReceivedEvent;
 import to.marcus.FlickrMVP.data.event.ImagesRequestedEvent;
+import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
-import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
-import to.marcus.FlickrMVP.ui.adapter.PhotoAdapter;
+import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 
 /**
@@ -34,7 +35,6 @@ public class RecentPresenterImpl implements RecentPresenter {
         initResponseHandler();
     }
 
-    //to-do
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         if(savedInstanceState == null){
@@ -106,7 +106,7 @@ public class RecentPresenterImpl implements RecentPresenter {
         mResponseHandler.getLooper();
         //listen for incoming images sent back to main handler thread
         mResponseHandler.setListener(new PhotoHandler.Listener<android.widget.ImageView>(){
-            public void onPhotoDownloaded(android.widget.ImageView imageView, Bitmap thumbnail) {
+            public void onPhotoDownloaded(android.widget.ImageView imageView, Bitmap thumbnail){
                 imageView.setImageBitmap(thumbnail);
             }
         });
@@ -114,9 +114,16 @@ public class RecentPresenterImpl implements RecentPresenter {
 
     private void initGridViewAdapter(){
         view.setGridViewAdapter(
-                new PhotoAdapter(view.getContext()
-                ,defaultPhotosArray.getPhotos()
-                ,mResponseHandler)
+            new PhotoRecyclerAdapter(view.getContext()
+            ,defaultPhotosArray.getPhotos()
+            ,mResponseHandler
+            ,new PhotoRecyclerAdapter.RecyclerViewItemClickListener() {
+                @Override
+                public void onItemClick(View v, int position) {
+                    Photo photo = view.getAdapter().getItem(position);
+                    onNetworkPhotoSelected(photo.getBigUrl());
+                }
+            })
         );
     }
 

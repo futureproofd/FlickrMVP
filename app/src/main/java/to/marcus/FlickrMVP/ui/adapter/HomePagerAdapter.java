@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
-import android.view.View;
-
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.ui.views.fragments.HistoryFragment;
@@ -25,7 +22,6 @@ import to.marcus.FlickrMVP.ui.views.fragments.SearchFragment;
  */
 
 public class HomePagerAdapter extends FragmentPagerAdapter{
-
     private static final String TAG = HomePagerAdapter.class.getSimpleName();
     public static final int RECENT_POSITION = 0;
     public static final int SEARCH_POSITION = 1;
@@ -47,7 +43,9 @@ public class HomePagerAdapter extends FragmentPagerAdapter{
                 if(mFragmentAtPos0 == null) {
                     mFragmentAtPos0 = RecentFragment.newInstance(new FragmentChangeListener(){
                         public void onSwitchToNextFragment(Bundle args) {
-                            mFragmentManager.beginTransaction().remove(mFragmentAtPos0).commit();
+                            mFragmentManager.beginTransaction()
+                                    .remove(mFragmentAtPos0)
+                                    .commit();
                             mFragmentAtPos0 = PhotoViewFragment.newInstance();
                             mFragmentAtPos0.setArguments(args);
                             mFragmentAtPos0.setIsChildFragment(true);
@@ -86,7 +84,9 @@ public class HomePagerAdapter extends FragmentPagerAdapter{
                 mFragmentAtPos0 = RecentFragment.newInstance(new FragmentChangeListener() {
                     @Override
                     public void onSwitchToNextFragment(Bundle args) {
-                        mFragmentManager.beginTransaction().remove(mFragmentAtPos0).commit();
+                        mFragmentManager.beginTransaction().remove(mFragmentAtPos0)
+                                .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out)
+                                .commit();
                         mFragmentAtPos0 = PhotoViewFragment.newInstance();
                         mFragmentAtPos0.setArguments(args);
                         mFragmentAtPos0.setIsChildFragment(true);

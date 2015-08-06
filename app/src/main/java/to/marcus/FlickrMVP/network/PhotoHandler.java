@@ -64,7 +64,6 @@ public class PhotoHandler<Token> extends HandlerThread {
             }else {
                 //decode bytes into bitmap from URL
                 byte[] bitmapBytes = new GetBytes().getUrlBytes(url);
-                Log.i(TAG, "bytes: "+url);
                 final Bitmap bitmap = BitmapFactory
                         .decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
                 postPhotoRunnable(token, bitmap, url);

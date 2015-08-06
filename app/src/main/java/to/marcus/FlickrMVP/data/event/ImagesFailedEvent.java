@@ -12,7 +12,7 @@ public class ImagesFailedEvent {
     private String result;
 
     public ImagesFailedEvent(String result){
-        Log.i(TAG, "Here's the result");
+        Log.i(TAG, "Failed to receive images: "+result);
         this.result = result;
     }
 

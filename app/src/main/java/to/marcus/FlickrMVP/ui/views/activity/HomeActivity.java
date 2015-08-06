@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
+import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.views.HomeView;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.ui.views.fragments.SearchFragment;
@@ -43,6 +44,8 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public ImageView mClearSearchButton;
     public ProgressBar mProgressBar;
     public SwipeRefreshLayout mSwipeRefreshWidget;
+
+    public PhotoRecyclerAdapter mPhotoRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,7 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public void initHomeViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.homeViewPager);
         mHomePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), getContext());
+
         mViewPager.setOffscreenPageLimit(mHomePagerAdapter.getCount() - 1);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
                 mViewPager.setAdapter(mHomePagerAdapter);
@@ -167,6 +171,7 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
                                     + mViewPager.getId()
                                     + ":"
                                     + mHomePagerAdapter.getItemId(1));
+
                     View view = searchFragment.getView();
                     searchFragment.onSearchReceived(mSearchBox.getText().toString());
                     dismissKeyboard();
