@@ -5,10 +5,12 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import to.marcus.FlickrMVP.data.PhotoCache;
+import to.marcus.FlickrMVP.data.interactor.PhotoInteractor;
 import to.marcus.FlickrMVP.ui.presenter.RecentPresenter;
 import to.marcus.FlickrMVP.ui.presenter.RecentPresenterImpl;
 import to.marcus.FlickrMVP.ui.views.fragments.RecentFragment;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
+
 
 /**
  * Created by marcus on 4/2/2015
@@ -34,7 +36,12 @@ public class RecentModule {
     }
 
     @Provides @Singleton
-    public RecentPresenter provideImagePresenter(PhotosView photosView, Bus bus, PhotoCache photoCache){
-        return new RecentPresenterImpl(photosView, bus, photoCache);
+    public RecentPresenter provideImagePresenter(PhotosView photosView
+            ,Bus bus
+            ,PhotoCache photoCache
+            ,PhotoInteractor photoInteractor
+    )
+    {
+        return new RecentPresenterImpl(photosView, bus, photoCache, photoInteractor);
     }
 }

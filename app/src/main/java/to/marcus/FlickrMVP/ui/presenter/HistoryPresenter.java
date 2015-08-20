@@ -3,11 +3,10 @@ package to.marcus.FlickrMVP.ui.presenter;
 import android.os.Bundle;
 
 /**
- * Created by marcus on 6/8/2015
+ * Created by marcus on 8/11/2015
  */
 
-public interface RecentPresenter {
-
+public interface HistoryPresenter {
     public void onActivityCreated(Bundle savedInstanceState);
 
     public void onSaveInstanceState(Bundle savedInstanceState);
@@ -20,7 +19,4 @@ public interface RecentPresenter {
 
     public void onRefresh();
 
-    public void requestNetworkPhotos();
-
-    public void onNetworkPhotoSelected(String url);
 }

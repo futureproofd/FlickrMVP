@@ -2,12 +2,12 @@ package to.marcus.FlickrMVP.ui.views.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +17,11 @@ import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 import to.marcus.FlickrMVP.modules.RecentModule;
-import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.presenter.RecentPresenter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 import to.marcus.FlickrMVP.ui.views.activity.HomeActivity;
+import to.marcus.FlickrMVP.ui.views.activity.PhotoViewActivity;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
@@ -42,19 +42,6 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView mRecyclerView;
     PhotoRecyclerAdapter mRecyclerAdapter;
-
-
-    //factory
-    public static RecentFragment newInstance(HomePagerAdapter.FragmentChangeListener listener){
-        return new RecentFragment(listener);
-    }
-
-    //Constructors
-    public RecentFragment(){}
-
-    public RecentFragment(HomePagerAdapter.FragmentChangeListener listener){
-        mListener = listener;
-    }
 
     @Override
     //Get BaseFragment scoped ObjectGraph
@@ -91,14 +78,8 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     @Override
     public void onPause(){
         super.onPause();
-        //destroy bus
+        //save photos, destroy bus
         recentPresenter.onPause();
-    }
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        //mResponseHandler.quit();
     }
 
     @Override
@@ -161,12 +142,9 @@ public class RecentFragment extends BaseFragment implements PhotosView {
 
     @Override
     public void showWebViewPhotoFragment(String url){
-        Bundle args = new Bundle();
-        args.putString(getContext().getString(R.string.large_photo), url);
-        //HomePageAdapter Listener
-        if(mListener != null){
-            mListener.onSwitchToNextFragment(args);
-        }
+        Intent intent = new Intent(getActivity(), PhotoViewActivity.class);
+        intent.putExtra(getString(R.string.large_photo), url);
+        startActivityForResult(intent, 0);
     }
 
     @Override

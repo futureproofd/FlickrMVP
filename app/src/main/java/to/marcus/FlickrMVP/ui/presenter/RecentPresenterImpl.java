@@ -10,6 +10,7 @@ import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.ImagesReceivedEvent;
 import to.marcus.FlickrMVP.data.event.ImagesRequestedEvent;
+import to.marcus.FlickrMVP.data.interactor.PhotoInteractor;
 import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
@@ -27,11 +28,13 @@ public class RecentPresenterImpl implements RecentPresenter {
     private PhotosView view;
     private Photos defaultPhotosArray;
     PhotoHandler mResponseHandler;
+    private PhotoInteractor photoInteractor;
 
-    public RecentPresenterImpl(PhotosView view, Bus bus, PhotoCache photoCache){
+    public RecentPresenterImpl(PhotosView view, Bus bus, PhotoCache photoCache, PhotoInteractor photoInteractor){
         this.photoCache = photoCache;
         this.bus = bus;
         this.view = view;
+        this.photoInteractor = photoInteractor;
         initResponseHandler();
     }
 
@@ -64,6 +67,7 @@ public class RecentPresenterImpl implements RecentPresenter {
 
     @Override
     public void onPause(){
+        photoInteractor.savePhotos();
         bus.unregister(this);
     }
 
@@ -73,17 +77,13 @@ public class RecentPresenterImpl implements RecentPresenter {
     }
 
     @Override
-    public void onDestroy(){}
+    public void onDestroy(){
+    }
 
     @Override
     public void requestNetworkPhotos(){
         //notify our ApiRequestHandler
         bus.post(new ImagesRequestedEvent());
-    }
-
-    @Override
-    public void onNetworkPhotoSelected(String url){
-        view.showWebViewPhotoFragment(url);
     }
 
     @Subscribe
@@ -94,6 +94,11 @@ public class RecentPresenterImpl implements RecentPresenter {
             view.hideSwipeRefreshWidget();
         }
         view.hideProgressBar();
+    }
+
+    @Override
+    public void onNetworkPhotoSelected(String url){
+        view.showWebViewPhotoFragment(url);
     }
 
     private void initInstanceState(){
@@ -117,10 +122,12 @@ public class RecentPresenterImpl implements RecentPresenter {
             new PhotoRecyclerAdapter(view.getContext()
             ,defaultPhotosArray.getPhotos()
             ,mResponseHandler
-            ,new PhotoRecyclerAdapter.RecyclerViewItemClickListener() {
+            ,new PhotoRecyclerAdapter.RecyclerViewItemClickListener(){
                 @Override
                 public void onItemClick(View v, int position) {
                     Photo photo = view.getAdapter().getItem(position);
+                    //Record to history
+                    photoInteractor.addPhoto(photo);
                     onNetworkPhotoSelected(photo.getBigUrl());
                 }
             })

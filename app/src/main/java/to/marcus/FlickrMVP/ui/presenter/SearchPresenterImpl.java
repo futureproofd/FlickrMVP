@@ -7,10 +7,14 @@ import android.util.Log;
 import android.view.View;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
+import java.util.ArrayList;
+
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.SearchReceivedEvent;
 import to.marcus.FlickrMVP.data.event.SearchRequestedEvent;
+import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;

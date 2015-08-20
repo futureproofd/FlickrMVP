@@ -36,12 +36,19 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdap
         this.mListener = listener;
     }
 
+    //History Adapter
+    public PhotoRecyclerAdapter(Context context, ArrayList<Photo> photos){
+        this.context = context;
+        this.mPhotos = photos;
+        this.mLayoutInflater = LayoutInflater.from(context);
+    }
+
     @Override
     public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_item, parent, false);
+        View v = mLayoutInflater.inflate(R.layout.photo_item, parent, false);
         final PhotoViewHolder mViewHolder = new PhotoViewHolder(v);
         v.setOnClickListener(new View.OnClickListener(){
-            //listen for clicks on Fragment listener
+            //listen for clicks on Presenters
             @Override
             public void onClick(View view){
                 mListener.onItemClick(view, mViewHolder.getPosition());

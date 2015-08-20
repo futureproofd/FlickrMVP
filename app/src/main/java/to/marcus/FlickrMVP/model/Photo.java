@@ -5,6 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Photo objects for Photos Array
  */
@@ -23,8 +26,10 @@ public class Photo implements Parcelable {
     @Expose private int isfriend;
     @Expose private int isfamily;
     @Expose private String url_s;
+    //History Trigger
+    private int isTouched;
 
-    private Photo(String id, String owner, String secret, String server, int farm, String title, int ispublic, int isfriend, int isfamily, String url_s){
+    private Photo(String id, String owner, String secret, String server, int farm, String title, int ispublic, int isfriend, int isfamily, String url_s, int isTouched){
         this.id = id;
         this.owner = owner;
         this.secret = secret;
@@ -35,11 +40,23 @@ public class Photo implements Parcelable {
         this.isfriend = isfriend;
         this.isfamily = isfamily;
         this.url_s = url_s;
+        //History default
+        this.isTouched = 0;
     }
+
+    public Photo(JSONObject json) throws JSONException{
+        title = json.getString("title");
+        url_s = json.getString("url");
+    }
+
     //helper methods:
     @Override
     public String toString(){return title;}
     public String getUrl(){return url_s;}
+    public String getTitle(){return title;}
+    public void setTouched(){this.isTouched = 1;}
+    public int isTouched(){return this.isTouched;}
+
     public String getBigUrl(){
         return "https://farm"
                 +farm
@@ -56,7 +73,7 @@ public class Photo implements Parcelable {
     /**
      * Parcelable methods
      * to save instance state on fragment start/stop
-     */
+    */
     public static final Parcelable.Creator<Photo> CREATOR = new Creator<Photo>(){
 
         @Override
@@ -81,7 +98,8 @@ public class Photo implements Parcelable {
                 in.readInt(),
                 in.readInt(),
                 in.readInt(),
-                in.readString()
+                in.readString(),
+                in.readInt()
         );
     }
 
@@ -102,6 +120,7 @@ public class Photo implements Parcelable {
         out.writeInt(isfriend);
         out.writeInt(isfamily);
         out.writeString(url_s);
+        out.writeInt(isTouched);
     }
 
     public Photo getParcelable(Bundle savedInstanceState){
@@ -111,4 +130,5 @@ public class Photo implements Parcelable {
     public void putParcelable(Bundle savedInstanceState, Photo photo){
         savedInstanceState.putParcelable(PARCEL_PHOTO_KEY, photo);
     }
+
 }

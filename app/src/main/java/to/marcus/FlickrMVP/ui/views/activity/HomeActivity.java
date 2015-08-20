@@ -1,5 +1,6 @@
 package to.marcus.FlickrMVP.ui.views.activity;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,7 +21,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+
 import to.marcus.FlickrMVP.R;
+import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.views.HomeView;
@@ -43,9 +48,7 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public EditText mSearchBox;
     public ImageView mClearSearchButton;
     public ProgressBar mProgressBar;
-    public SwipeRefreshLayout mSwipeRefreshWidget;
-
-    public PhotoRecyclerAdapter mPhotoRecyclerAdapter;
+    public ArrayList<Photo> mPhotoHistoryArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,28 +61,6 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
         initProgressBar();
     }
 
-    //If back is called from a child fragment or a parent fragment
-    @Override
-    public void onBackPressed(){
-        Fragment fragment = (Fragment)getSupportFragmentManager()
-                .findFragmentByTag("android:switcher:"
-                        +mViewPager.getId()
-                        +":"
-                        +mViewPager.getCurrentItem()
-                );
-        if(fragment != null && fragment instanceof BaseFragment){
-            if(fragment.getView() != null){
-                BaseFragment bf = (BaseFragment)fragment;
-                if(bf.isChildFragment()){
-                    mViewPager.getCurrentItem();
-                    replaceChild(bf, mViewPager.getCurrentItem());
-                }else{
-                    finish();
-                }
-            }
-        }
-    }
-
     /*
     HomeView Implementations
      */
@@ -87,7 +68,6 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public void initHomeViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.homeViewPager);
         mHomePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), getContext());
-
         mViewPager.setOffscreenPageLimit(mHomePagerAdapter.getCount() - 1);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
                 mViewPager.setAdapter(mHomePagerAdapter);
@@ -143,20 +123,12 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
         mSearchBox = (EditText) findViewById(R.id.toolbar_search_box);
         mSearchBox.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.i(TAG, "on text changed listener");
-
-            }
-
+            public void onTextChanged(CharSequence s, int start, int before, int count){}
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() <= 0) {
-                    Log.i(TAG, "after text changed listener");
-                    mSearchBox.setHintTextColor(Color.parseColor("#b3ffffff"));
-                }
+                if (s.toString().length() <= 0){ mSearchBox.setHintTextColor(Color.parseColor("#b3ffffff"));}
             }
         });
 
@@ -231,18 +203,11 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public void toggleFullScreen(){
         if((getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0){
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+            WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         }else{
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-    }
-
-    public void replaceChild(BaseFragment childFrg, int position){
-        toggleFullScreen();
-        mHomePagerAdapter.replaceChildFragment(childFrg, position);
-        mToolBar.setVisibility(View.VISIBLE);
-        mSlidingTabLayout.setVisibility(View.VISIBLE);
     }
 
     /*

@@ -15,13 +15,12 @@ import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 public abstract class BaseFragment extends Fragment {
     private static final String TAG = BaseFragment.class.getSimpleName();
     private ObjectGraph mObjectGraph;
-    protected HomePagerAdapter.FragmentChangeListener mListener;
-    private boolean mIsChildFragment;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        mObjectGraph = BaseApplication.get(getActivity()).createScopedGraph(getModules().toArray());
+        mObjectGraph = BaseApplication.get(getActivity())
+                .createScopedGraph(getModules().toArray());
         mObjectGraph.inject(this);
     }
 
@@ -37,11 +36,4 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroy();
     }
 
-    public boolean isChildFragment(){
-        return mIsChildFragment;
-    }
-
-    public void setIsChildFragment(boolean showingChild){
-        mIsChildFragment = showingChild;
-    }
 }

@@ -27,9 +27,6 @@ public class PhotoViewPresenterImpl implements PhotoViewPresenter {
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         view.toggleFullScreen();
-        view.dismissToolBar();
-        view.dismissSlidingTabs();
-        view.getProgressBar();
         if(savedInstanceState == null){
             //initInstanceState();
         }else{
@@ -64,6 +61,7 @@ public class PhotoViewPresenterImpl implements PhotoViewPresenter {
 
     @Override
     public void requestNetworkPhoto(String url){
+        view.showProgressBar();
         mResponseHandler.queueThumbnail(view.getPhotoView(), url);
     }
 
@@ -74,6 +72,7 @@ public class PhotoViewPresenterImpl implements PhotoViewPresenter {
         //listen for incoming images sent back to main handler thread
         mResponseHandler.setListener(new PhotoHandler.Listener<android.widget.ImageView>(){
             public void onPhotoDownloaded(android.widget.ImageView imageView, Bitmap LargeBitmap){
+                view.hideProgressBar();
                 imageView.setImageBitmap(LargeBitmap);
             }
         });

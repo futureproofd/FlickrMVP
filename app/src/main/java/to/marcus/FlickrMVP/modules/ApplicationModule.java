@@ -18,14 +18,14 @@ import to.marcus.FlickrMVP.network.ApiService;
 
 @Module(
         injects = BaseApplication.class
+       ,includes = InteractorModule.class
        )
 
 public class ApplicationModule {
+    private BaseApplication application;
 
-    private final String apiKey;
-
-    public ApplicationModule(String apiKey) {
-        this.apiKey = apiKey;
+    public ApplicationModule(BaseApplication application) {
+        this.application = application;
     }
 
     @Provides
@@ -43,6 +43,15 @@ public class ApplicationModule {
     public ApiEndpoint provideEndPoint() {
         return new ApiEndpoint();
     }
+
+    @Provides
+    @Singleton
+    public BaseApplication provideApplication(){
+        return application;
+    }
+
+    @Provides
+    public Context provideApplicationContext(){return application.getApplicationContext();}
 
     @Provides
     @Singleton

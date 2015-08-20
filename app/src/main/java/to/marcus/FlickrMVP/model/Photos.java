@@ -30,6 +30,9 @@ public class Photos implements Parcelable {
     //helpers
     public ArrayList<Photo> getPhotos(){return photo;}
     public void setPhotos(ArrayList<Photo> photos){this.photo = photos;}
+    public void addPhoto(Photo photoObj){
+        photo.add(photoObj);
+    }
 
     /**
      * Parcelable methods

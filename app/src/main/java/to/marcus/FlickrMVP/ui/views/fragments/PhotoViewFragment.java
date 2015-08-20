@@ -2,11 +2,11 @@ package to.marcus.FlickrMVP.ui.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.modules.PhotoViewModule;
 import to.marcus.FlickrMVP.ui.presenter.PhotoViewPresenter;
 import to.marcus.FlickrMVP.ui.views.PhotoLargeView;
-import to.marcus.FlickrMVP.ui.views.activity.HomeActivity;
+import to.marcus.FlickrMVP.ui.views.activity.PhotoViewActivity;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 
 /**
@@ -49,7 +49,6 @@ public class PhotoViewFragment extends BaseFragment implements PhotoLargeView {
         Log.i(TAG, "onActivityCreated");
         photoViewPresenter.onActivityCreated(savedInstanceState);
         photoViewPresenter.requestNetworkPhoto(mUrl);
-
     }
 
     @Override
@@ -57,6 +56,7 @@ public class PhotoViewFragment extends BaseFragment implements PhotoLargeView {
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.fragment_photoview_layout, parentContainer, false);
+        mProgressBar = ((PhotoViewActivity)getActivity()).getProgressBar();
         mImageView = (ImageView) v.findViewById(R.id.photo_large_view);
         return v;
     }
@@ -73,24 +73,10 @@ public class PhotoViewFragment extends BaseFragment implements PhotoLargeView {
     View Implementations
      */
     @Override
-    public void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
+    public void showProgressBar(){mProgressBar.setVisibility(View.VISIBLE);}
 
     @Override
-    public void hideProgressBar() {
-        mProgressBar.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void dismissToolBar() {
-        ((HomeActivity) getActivity()).dismissToolBar();
-    }
-
-    @Override
-    public void dismissSlidingTabs() {
-        ((HomeActivity) getActivity()).dismissSlidingTabs();
-    }
+    public void hideProgressBar(){mProgressBar.setVisibility(View.INVISIBLE);}
 
     @Override
     public Context getContext() {
@@ -103,13 +89,7 @@ public class PhotoViewFragment extends BaseFragment implements PhotoLargeView {
     }
 
     @Override
-    public ProgressBar getProgressBar() {
-        return (mProgressBar = ((HomeActivity) getActivity()).getProgressBar());
-    }
-
-    @Override
-    public void toggleFullScreen(){
-        ((HomeActivity) getActivity()).toggleFullScreen();
+    public void toggleFullScreen(){((PhotoViewActivity) getActivity()).toggleFullScreen();
     }
 
 }

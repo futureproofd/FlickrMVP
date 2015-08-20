@@ -60,6 +60,7 @@ public class PhotoHandler<Token> extends HandlerThread {
         try{
             final String url = requestMap.get(token);
             if(mPhotoCache.isCached(url)){
+                Log.i(TAG, "object is cached: "+ url);
                 postPhotoRunnable(token, mPhotoCache.getBitmapFromCache(url), url);
             }else {
                 //decode bytes into bitmap from URL
