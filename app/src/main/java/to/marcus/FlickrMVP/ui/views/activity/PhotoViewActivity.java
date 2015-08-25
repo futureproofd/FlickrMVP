@@ -1,22 +1,13 @@
 package to.marcus.FlickrMVP.ui.views.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
-
-import java.util.List;
-
 import to.marcus.FlickrMVP.R;
-import to.marcus.FlickrMVP.ui.views.HomeView;
 import to.marcus.FlickrMVP.ui.views.fragments.PhotoViewFragment;
 
 /**

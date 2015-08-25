@@ -19,5 +19,7 @@ public interface PhotosView extends BaseContextView {
     void showSwipeRefreshWidget();
     void hideSwipeRefreshWidget();
     boolean isSwipeRefreshing();
+    void showKeyboard();
+    void hideKeyboard();
     void showWebViewPhotoFragment(String url);
 }

@@ -17,6 +17,8 @@ public interface PhotoViewPresenter {
 
     public void onDestroy();
 
+    public void onDestroyView();
+
     public void onRefresh();
 
     public void requestNetworkPhoto(String url);

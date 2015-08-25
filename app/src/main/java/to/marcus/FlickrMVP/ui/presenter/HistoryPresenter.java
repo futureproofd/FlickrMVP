@@ -19,4 +19,7 @@ public interface HistoryPresenter {
 
     public void onRefresh();
 
+    public void onNetworkPhotoSelected(String url);
+
+    public void onDeletePhotos();
 }

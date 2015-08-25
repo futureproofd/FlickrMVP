@@ -38,7 +38,6 @@ public class PhotoViewFragment extends BaseFragment implements PhotoLargeView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
         Bundle bundle = getArguments();
         mUrl = bundle.getString(getContext().getString(R.string.large_photo));
     }
@@ -46,7 +45,6 @@ public class PhotoViewFragment extends BaseFragment implements PhotoLargeView {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
         photoViewPresenter.onActivityCreated(savedInstanceState);
         photoViewPresenter.requestNetworkPhoto(mUrl);
     }
@@ -59,6 +57,18 @@ public class PhotoViewFragment extends BaseFragment implements PhotoLargeView {
         mProgressBar = ((PhotoViewActivity)getActivity()).getProgressBar();
         mImageView = (ImageView) v.findViewById(R.id.photo_large_view);
         return v;
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        photoViewPresenter.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        photoViewPresenter.onDestroy();
     }
 
     //BaseFragment

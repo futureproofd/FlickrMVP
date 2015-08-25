@@ -30,8 +30,6 @@ public class PhotoInteractorImpl implements PhotoInteractor{
 
     @Override
     public void addPhoto(Photo photo){
-        //use application context for photoStorage
-        mAppContext.getText(R.string.large_photo);
         photoStorage.addPhoto(photo);
     }
 

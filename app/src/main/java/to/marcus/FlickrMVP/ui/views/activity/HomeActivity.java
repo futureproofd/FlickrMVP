@@ -30,6 +30,7 @@ import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.views.HomeView;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
+import to.marcus.FlickrMVP.ui.views.fragments.HistoryFragment;
 import to.marcus.FlickrMVP.ui.views.fragments.SearchFragment;
 import to.marcus.FlickrMVP.ui.views.supportwidgets.DepthPageTransformer;
 import to.marcus.FlickrMVP.ui.views.supportwidgets.SlidingTabLayout;
@@ -47,8 +48,8 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public SlidingTabLayout mSlidingTabLayout;
     public EditText mSearchBox;
     public ImageView mClearSearchButton;
+    public ImageView mClearHistoryButton;
     public ProgressBar mProgressBar;
-    public ArrayList<Photo> mPhotoHistoryArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
         initSlidingTabs();
         initToolBar();
         initSearchBox();
+        initDeleteWidget();
         initProgressBar();
     }
 
@@ -101,18 +103,22 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
             @Override
             public void onPageSelected(int position) {
                 setToolbarTitle(position);
-                if(position == HomePagerAdapter.SEARCH_POSITION){
+                if(position == HomePagerAdapter.RECENT_POSITION) {
+                    mSearchBox.setVisibility(View.GONE);
+                    mClearSearchButton.setVisibility(View.GONE);
+                    mClearHistoryButton.setVisibility(View.GONE);
+                }else if(position == HomePagerAdapter.HISTORY_POSITION){
+                    mClearHistoryButton.setVisibility(View.VISIBLE);
+                    mClearSearchButton.setVisibility(View.GONE);
+                    mSearchBox.setVisibility(View.GONE);
+                }else{
                     mSearchBox.setVisibility(View.VISIBLE);
                     mClearSearchButton.setVisibility(View.VISIBLE);
-                }else{
-                    mSearchBox.setVisibility(View.INVISIBLE);
-                    mClearSearchButton.setVisibility(View.INVISIBLE);
+                    mClearHistoryButton.setVisibility(View.GONE);
                 }
             }
-
             @Override
-            public void onPageScrollStateChanged(int i) {
-            }
+            public void onPageScrollStateChanged(int i){}
         });
         mSlidingTabLayout.setViewPager(mViewPager);
     }
@@ -162,6 +168,24 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     }
 
     @Override
+    public void initDeleteWidget(){
+        mClearHistoryButton = (ImageView)findViewById(R.id.history_clear);
+        mClearHistoryButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                HistoryFragment historyFragment = (HistoryFragment)getSupportFragmentManager()
+                        .findFragmentByTag(
+                                "android:switcher:"
+                                        + mViewPager.getId()
+                                        + ":"
+                                        + mHomePagerAdapter.getItemId(2));
+                Log.i(TAG, "Deleting photos");
+                historyFragment.deletePhotos();
+            }
+        });
+    }
+
+    @Override
     public void initProgressBar(){
         mProgressBar = (ProgressBar)findViewById(R.id.progress_bar_main);
     }
@@ -183,9 +207,14 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
         }
     }
 
-    private void dismissKeyboard(){
-        InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+    public void dismissKeyboard(){
+        InputMethodManager imm =(InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSearchBox.getWindowToken(), 0);
+    }
+
+    public void showKeyboard(){
+        InputMethodManager imm =(InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInputFromWindow(mSearchBox.getWindowToken(), InputMethodManager.SHOW_FORCED, 1);
     }
 
     public void dismissToolBar(){

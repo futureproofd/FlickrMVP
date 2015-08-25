@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
@@ -27,7 +29,9 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdap
     public RecyclerViewItemClickListener mListener;
     private int lastPosition = RecyclerView.NO_POSITION;
 
-    public PhotoRecyclerAdapter(Context context, ArrayList<Photo> photos, PhotoHandler handler
+    public PhotoRecyclerAdapter(Context context
+            ,ArrayList<Photo> photos
+            ,PhotoHandler handler
             ,RecyclerViewItemClickListener listener){
         this.context = context;
         this.mPhotos = photos;
@@ -64,6 +68,7 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdap
         holder.imageView.setImageDrawable(null);
         mPhotoHandler.queueThumbnail(holder.imageView, photo.getUrl());
         setAnimation(holder.imageView, position);
+        holder.textView.setText(photo.getTitle());
     }
 
     @Override
@@ -74,11 +79,14 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdap
     /*
     * ViewHolder inner class
     */
-    public static class PhotoViewHolder extends RecyclerView.ViewHolder{
+    public static class PhotoViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
+        public TextView textView;
+
         public PhotoViewHolder(View v){
             super(v);
-            imageView = (ImageView)v.findViewById(R.id.photo_item_imageView);
+            imageView = (ImageView) v.findViewById(R.id.photo_item_imageView);
+            textView = (TextView) v.findViewById(R.id.photo_title);
         }
     }
 

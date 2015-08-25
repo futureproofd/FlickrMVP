@@ -3,12 +3,11 @@ package to.marcus.FlickrMVP.ui.presenter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.interactor.PhotoInteractor;
@@ -39,14 +38,9 @@ public class HistoryPresenterImpl implements HistoryPresenter{
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        view.showProgressBar();
         mPhotos = photoInteractor.getPhotos();
         initGridViewAdapter();
-        if(savedInstanceState == null){
-            //initInstanceState();
-            //view.showProgressBar();
-        }else{
-            //restoreInstanceState(savedInstanceState);
-        }
     }
 
     private void initResponseHandler(){
@@ -62,12 +56,17 @@ public class HistoryPresenterImpl implements HistoryPresenter{
     }
 
     @Override
+    public void onNetworkPhotoSelected(String url){
+        view.showWebViewPhotoFragment(url);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
     }
 
     @Override
     public void onResume() {
-      // initGridViewAdapter();
+
     }
 
     @Override
@@ -76,12 +75,21 @@ public class HistoryPresenterImpl implements HistoryPresenter{
 
     @Override
     public void onDestroy() {
-        //photoInteractor.deletePhotos();
     }
 
     @Override
     public void onRefresh() {
 
+    }
+
+    @Override
+    public void onDeletePhotos(){
+        if(mPhotos.size() == 0){
+            Toast.makeText(view.getContext(), "No Photos to delete", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(view.getContext(), "Photos Deleted", Toast.LENGTH_SHORT).show();
+            photoInteractor.deletePhotos();
+        }
     }
 
     private void initInstanceState(){
@@ -90,17 +98,18 @@ public class HistoryPresenterImpl implements HistoryPresenter{
 
     private void initGridViewAdapter(){
         view.setGridViewAdapter(
-
-                        new PhotoRecyclerAdapter(
-                                view.getContext()
-                                ,mPhotos
-                                ,mResponseHandler
-                                ,new PhotoRecyclerAdapter.RecyclerViewItemClickListener() {
-                            @Override
-                            public void onItemClick(View v, int position) {
-                            }
-                        }));
+            new PhotoRecyclerAdapter(view.getContext()
+                ,mPhotos
+                ,mResponseHandler
+                ,new PhotoRecyclerAdapter.RecyclerViewItemClickListener(){
+                    @Override
+                    public void onItemClick(View v, int position){
+                        Photo photo = view.getAdapter().getItem(position);
+                        photoInteractor.addPhoto(photo);
+                        onNetworkPhotoSelected(photo.getBigUrl());
+                    }
+                }
+            )
+        );
     }
-
-
 }

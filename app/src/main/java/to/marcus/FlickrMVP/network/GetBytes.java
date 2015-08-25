@@ -8,6 +8,7 @@ import java.net.URL;
 
 /**
  * Created by marcus on 5/14/2015
+ * helper class to decode bytes from a given URL
  */
 
 public class GetBytes {

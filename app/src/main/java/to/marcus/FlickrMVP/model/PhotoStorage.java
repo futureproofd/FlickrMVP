@@ -45,11 +45,12 @@ public class PhotoStorage{
 
     public void deletePhotos(){
         mPhotos.clear();
+        savePhotosToFile();
     }
 
     public void addPhoto(Photo photo){
-        Log.i(TAG, "added photo");
-        mPhotos.add(photo);
+        if(!mPhotos.contains(photo))
+            mPhotos.add(photo);
     }
 
     public boolean savePhotosToFile(){

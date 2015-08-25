@@ -1,6 +1,7 @@
 <resources>
     <!-- Base application theme. This also applies to elements such as the ProgressBar-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
         <item name="colorPrimary">@color/toolBarPrimary</item>
         <item name="colorPrimaryDark">@color/toolBarDark</item>
         <item name="colorAccent">@color/tabScroll</item>

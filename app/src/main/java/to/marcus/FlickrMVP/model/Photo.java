@@ -54,8 +54,6 @@ public class Photo implements Parcelable {
     public String toString(){return title;}
     public String getUrl(){return url_s;}
     public String getTitle(){return title;}
-    public void setTouched(){this.isTouched = 1;}
-    public int isTouched(){return this.isTouched;}
 
     public String getBigUrl(){
         return "https://farm"

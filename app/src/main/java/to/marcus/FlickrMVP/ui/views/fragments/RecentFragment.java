@@ -141,6 +141,12 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     public boolean isSwipeRefreshing(){return mSwipeRefreshWidget.isRefreshing();}
 
     @Override
+    public void showKeyboard(){}
+
+    @Override
+    public void hideKeyboard(){}
+
+    @Override
     public void showWebViewPhotoFragment(String url){
         Intent intent = new Intent(getActivity(), PhotoViewActivity.class);
         intent.putExtra(getString(R.string.large_photo), url);

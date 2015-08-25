@@ -1,6 +1,7 @@
 package to.marcus.FlickrMVP.ui.views.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +22,7 @@ import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.presenter.SearchPresenter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 import to.marcus.FlickrMVP.ui.views.activity.HomeActivity;
+import to.marcus.FlickrMVP.ui.views.activity.PhotoViewActivity;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 
 /**
@@ -37,6 +39,7 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     PhotoHandler mResponseHandler;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView mRecyclerView;
+    PhotoRecyclerAdapter mRecyclerAdapter;
 
     @Override
     //Get BaseFragment scoped ObjectGraph
@@ -111,9 +114,11 @@ public class SearchFragment extends BaseFragment implements PhotosView{
      */
     @Override
     public void setGridViewAdapter(PhotoRecyclerAdapter adapter){
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerAdapter = adapter;
+        mRecyclerView.setItemViewCacheSize(6);
         mLayoutManager = new GridLayoutManager(getContext(), 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -151,8 +156,16 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     public boolean isSwipeRefreshing(){return mSwipeRefreshWidget.isRefreshing();}
 
     @Override
-    public void showWebViewPhotoFragment(String url) {
+    public void showKeyboard(){((HomeActivity)getActivity()).showKeyboard();}
 
+    @Override
+    public void hideKeyboard(){((HomeActivity)getActivity()).dismissKeyboard();}
+
+    @Override
+    public void showWebViewPhotoFragment(String url){
+        Intent intent = new Intent(getActivity(), PhotoViewActivity.class);
+        intent.putExtra(getString(R.string.large_photo), url);
+        startActivityForResult(intent, 0);
     }
 
     @Override
@@ -172,7 +185,7 @@ public class SearchFragment extends BaseFragment implements PhotosView{
 
     @Override
     public PhotoRecyclerAdapter getAdapter(){
-        return null;
+        return mRecyclerAdapter;
     }
 
 }

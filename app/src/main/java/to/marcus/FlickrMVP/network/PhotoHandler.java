@@ -48,7 +48,6 @@ public class PhotoHandler<Token> extends HandlerThread {
             public void handleMessage(Message msg){
                 if (msg.what == 0){
                     Token token = (Token)msg.obj;
-                    //Log.i(TAG, "2. Got a request for url: "+ requestMap.get(token));
                     handleRequest(token);
                 }
             }
@@ -93,9 +92,10 @@ public class PhotoHandler<Token> extends HandlerThread {
          send to msgQueue
      */
     public void queueThumbnail(Token token, String url){
+        while(mHandler == null)
+            Log.i(TAG, "waiting for handler");
         requestMap.put(token, url);
         mHandler.obtainMessage(0, token).sendToTarget();
-        //Log.i(TAG, "1. Got a URL: " + url);
     }
 
     public void clearQueue(){

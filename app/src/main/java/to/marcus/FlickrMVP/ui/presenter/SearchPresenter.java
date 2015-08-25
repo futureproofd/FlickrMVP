@@ -20,4 +20,6 @@ public interface SearchPresenter {
     public void onRefresh();
 
     public void requestNetworkPhotos(String query);
+
+    public void onNetworkPhotoSelected(String url);
 }

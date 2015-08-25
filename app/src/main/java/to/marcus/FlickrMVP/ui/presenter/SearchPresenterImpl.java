@@ -14,11 +14,14 @@ import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.SearchReceivedEvent;
 import to.marcus.FlickrMVP.data.event.SearchRequestedEvent;
+import to.marcus.FlickrMVP.data.interactor.PhotoInteractor;
+import to.marcus.FlickrMVP.data.interactor.PhotoInteractorImpl;
 import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
+import to.marcus.FlickrMVP.ui.views.activity.HomeActivity;
 
 /**
  * Created by marcus on 6/26/2015
@@ -32,20 +35,25 @@ public class SearchPresenterImpl implements SearchPresenter {
     private PhotosView view;
     private Photos defaultPhotosArray;
     PhotoHandler mResponseHandler;
+    private PhotoInteractor photoInteractor;
 
-    public SearchPresenterImpl(PhotosView view, Bus bus, PhotoCache photoCache){
+    public SearchPresenterImpl(PhotosView view, Bus bus, PhotoCache photoCache, PhotoInteractor photoInteractor){
         this.photoCache = photoCache;
         this.bus = bus;
         this.view = view;
+        this.photoInteractor = photoInteractor;
         initResponseHandler();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         if(savedInstanceState == null){
+            view.showKeyboard();
             initInstanceState();
+            initGridViewAdapter();
         }else{
             restoreInstanceState(savedInstanceState);
+           // view.hideKeyboard();
         }
         view.initSwipeRefreshWidget();
     }
@@ -87,6 +95,9 @@ public class SearchPresenterImpl implements SearchPresenter {
         bus.post(new SearchRequestedEvent(query));
     }
 
+    @Override
+    public void onNetworkPhotoSelected(String url){view.showWebViewPhotoFragment(url);}
+
     @Subscribe
     public void onImagesArrayReceived(SearchReceivedEvent event){
         this.defaultPhotosArray.setPhotos(event.getResult());
@@ -114,16 +125,16 @@ public class SearchPresenterImpl implements SearchPresenter {
     }
 
     private void initGridViewAdapter(){
-        //to-do : determine which photosArray to use (cached / network?)
         view.setGridViewAdapter(
-                new PhotoRecyclerAdapter(
-                view.getContext()
+                new PhotoRecyclerAdapter(view.getContext()
                 ,defaultPhotosArray.getPhotos()
                 ,mResponseHandler
                 ,new PhotoRecyclerAdapter.RecyclerViewItemClickListener() {
                     @Override
-                    public void onItemClick(View v, int position) {
-                        Log.i(TAG, "clicked position: "+position);
+                    public void onItemClick(View v, int position){
+                        Photo photo = view.getAdapter().getItem(position);
+                        photoInteractor.addPhoto(photo);
+                        onNetworkPhotoSelected(photo.getBigUrl());
                     }
         }));
     }

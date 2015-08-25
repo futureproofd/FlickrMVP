@@ -46,12 +46,16 @@ public class PhotoViewPresenterImpl implements PhotoViewPresenter {
 
     @Override
     public void onPause() {
-
     }
 
     @Override
     public void onDestroy(){
+        mResponseHandler.quit();
+    }
 
+    @Override
+    public void onDestroyView(){
+        mResponseHandler.clearQueue();
     }
 
     @Override
@@ -61,8 +65,9 @@ public class PhotoViewPresenterImpl implements PhotoViewPresenter {
 
     @Override
     public void requestNetworkPhoto(String url){
-        view.showProgressBar();
-        mResponseHandler.queueThumbnail(view.getPhotoView(), url);
+        if(url != null)
+            view.showProgressBar();
+            mResponseHandler.queueThumbnail(view.getPhotoView(), url);
     }
 
     private void initResponseHandler(){
