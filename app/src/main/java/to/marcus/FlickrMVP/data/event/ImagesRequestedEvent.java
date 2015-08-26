@@ -3,7 +3,7 @@ package to.marcus.FlickrMVP.data.event;
 import android.util.Log;
 
 /**
- * Created by mplienegger on 4/20/2015
+ * Created by marcus on 4/20/2015
  */
 
 public class ImagesRequestedEvent {

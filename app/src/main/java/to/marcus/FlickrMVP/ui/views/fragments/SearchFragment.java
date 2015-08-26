@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import javax.inject.Inject;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.modules.SearchModule;
-import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.presenter.SearchPresenter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
@@ -34,9 +34,7 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     ProgressBar mProgressBar;
     SwipeRefreshLayout mSwipeRefreshWidget;
     ArrayList<Photo> receivedPhotosList;
-    @Inject
-    SearchPresenter searchPresenter;
-    PhotoHandler mResponseHandler;
+    @Inject SearchPresenter searchPresenter;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView mRecyclerView;
     PhotoRecyclerAdapter mRecyclerAdapter;
@@ -74,14 +72,14 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     @Override
     public void onPause(){
         super.onPause();
-        //destroy bus
+        //destroy bus, save photos
         searchPresenter.onPause();
     }
 
     @Override
     public void onDestroy(){
+        searchPresenter.onDestroy();
         super.onDestroy();
-        //mResponseHandler.quit();
     }
 
     @Override
@@ -92,8 +90,8 @@ public class SearchFragment extends BaseFragment implements PhotosView{
 
     @Override
     public void onDestroyView(){
+        searchPresenter.onDestroyView();
         super.onDestroyView();
-        //mResponseHandler.clearQueue();
     }
 
     //result from Activity

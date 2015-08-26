@@ -53,7 +53,7 @@ public class SearchPresenterImpl implements SearchPresenter {
             initGridViewAdapter();
         }else{
             restoreInstanceState(savedInstanceState);
-           // view.hideKeyboard();
+            //view.hideKeyboard();
         }
         view.initSwipeRefreshWidget();
     }
@@ -69,17 +69,23 @@ public class SearchPresenterImpl implements SearchPresenter {
     }
 
     @Override
-    public void onResume(){
-        bus.register(this);
-    }
+    public void onResume(){bus.register(this);}
 
     @Override
     public void onPause(){
+        photoInteractor.savePhotos();
         bus.unregister(this);
     }
 
     @Override
-    public void onDestroy(){}
+    public void onDestroy(){
+        mResponseHandler.quit();
+    }
+
+    @Override
+    public void onDestroyView(){
+        mResponseHandler.clearQueue();
+    }
 
     @Override
     public void onRefresh(){

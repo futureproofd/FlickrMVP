@@ -72,12 +72,16 @@ public class RecentPresenterImpl implements RecentPresenter {
     }
 
     @Override
-    public void onRefresh(){
-        requestNetworkPhotos();
-    }
+    public void onRefresh(){requestNetworkPhotos();}
 
     @Override
     public void onDestroy(){
+        mResponseHandler.quit();
+    }
+
+    @Override
+    public void onDestroyView(){
+        mResponseHandler.clearQueue();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package to.marcus.FlickrMVP.modules;
 
-import com.squareup.otto.Bus;
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;

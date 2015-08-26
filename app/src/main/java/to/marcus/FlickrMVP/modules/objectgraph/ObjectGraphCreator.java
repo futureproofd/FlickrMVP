@@ -1,7 +1,6 @@
 package to.marcus.FlickrMVP.modules.objectgraph;
 
 import android.app.Application;
-
 import dagger.ObjectGraph;
 
 /**

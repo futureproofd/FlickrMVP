@@ -1,7 +1,6 @@
 package to.marcus.FlickrMVP.data;
 
 import java.util.ArrayList;
-
 import to.marcus.FlickrMVP.model.Photo;
 
 /**

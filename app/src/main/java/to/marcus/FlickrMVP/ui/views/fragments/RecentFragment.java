@@ -25,7 +25,6 @@ import to.marcus.FlickrMVP.ui.views.activity.PhotoViewActivity;
 import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
-import to.marcus.FlickrMVP.network.PhotoHandler;
 
 /**
  * Created by marcus on 31/03/15
@@ -38,7 +37,6 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     SwipeRefreshLayout mSwipeRefreshWidget;
     ArrayList<Photo> receivedPhotosList;
     @Inject RecentPresenter recentPresenter;
-    PhotoHandler mResponseHandler;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView mRecyclerView;
     PhotoRecyclerAdapter mRecyclerAdapter;
@@ -83,9 +81,15 @@ public class RecentFragment extends BaseFragment implements PhotosView {
     }
 
     @Override
+    public void onDestroy(){
+        recentPresenter.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
     public void onDestroyView(){
+        recentPresenter.onDestroyView();
         super.onDestroyView();
-        //mResponseHandler.clearQueue();
     }
 
     @Override

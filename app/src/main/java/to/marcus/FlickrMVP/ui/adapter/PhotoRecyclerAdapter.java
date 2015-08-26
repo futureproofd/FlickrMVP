@@ -9,7 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;

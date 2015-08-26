@@ -17,6 +17,8 @@ public interface SearchPresenter {
 
     public void onDestroy();
 
+    public void onDestroyView();
+
     public void onRefresh();
 
     public void requestNetworkPhotos(String query);

@@ -1,12 +1,10 @@
 package to.marcus.FlickrMVP.data;
 
 import android.content.Context;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,27 +14,17 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-
 import to.marcus.FlickrMVP.model.Photo;
 
 /**
  * Created by marcus on 8/17/2015
  */
+
 public class PhotoJSONer {
     private Context mContext;
     private String mFilename;
-    private static final String JSON_ID = "id";
-    private static final String JSON_OWNER = "owner";
-    private static final String JSON_SECRET = "secret";
-    private static final String JSON_SERVER = "server";
-    private static final String JSON_FARM = "farm";
     private static final String JSON_TITLE = "title";
-    private static final String JSON_ISPUBLIC = "ispublic";
-    private static final String JSON_ISFRIEND = "isfriend";
-    private static final String JSON_ISFAMILY = "isfamily";
     private static final String JSON_URL = "url";
-    //History default
-    private int JSON_ISTOUCHED;
 
     public PhotoJSONer(Context c, String f){
         mContext = c;
@@ -60,7 +48,7 @@ public class PhotoJSONer {
         }
     }
 
-    //conversion - see ContactJSONer for writing to file
+    //conversion
     public JSONObject toJSON(Photo photo) throws JSONException{
         JSONObject json = new JSONObject();
         json.put(JSON_TITLE, photo.getTitle());
@@ -82,10 +70,8 @@ public class PhotoJSONer {
             while ((line = reader.readLine()) != null){
                 jsonString.append(line);
             }
-
             //parse JSON using JSONTokener
             JSONArray array = (JSONArray) new JSONTokener(jsonString.toString()).nextValue();
-
             //Build the array of contacts from JSONObjects (call the custom constructor)
             for (int i = 0; i < array.length(); i++){
                 photos.add(new Photo(array.getJSONObject(i)));

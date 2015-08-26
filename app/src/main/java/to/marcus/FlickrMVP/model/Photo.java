@@ -26,10 +26,8 @@ public class Photo implements Parcelable {
     @Expose private int isfriend;
     @Expose private int isfamily;
     @Expose private String url_s;
-    //History Trigger
-    private int isTouched;
 
-    private Photo(String id, String owner, String secret, String server, int farm, String title, int ispublic, int isfriend, int isfamily, String url_s, int isTouched){
+    private Photo(String id, String owner, String secret, String server, int farm, String title, int ispublic, int isfriend, int isfamily, String url_s){
         this.id = id;
         this.owner = owner;
         this.secret = secret;
@@ -40,8 +38,6 @@ public class Photo implements Parcelable {
         this.isfriend = isfriend;
         this.isfamily = isfamily;
         this.url_s = url_s;
-        //History default
-        this.isTouched = 0;
     }
 
     public Photo(JSONObject json) throws JSONException{
@@ -54,19 +50,9 @@ public class Photo implements Parcelable {
     public String toString(){return title;}
     public String getUrl(){return url_s;}
     public String getTitle(){return title;}
-
     public String getBigUrl(){
-        return "https://farm"
-                +farm
-                +".staticflickr.com/"
-                +server
-                +"/"
-                +id
-                +"_"
-                +secret
-                +"_c.jpg"
-                ;
-        }
+        return url_s.substring(0,((url_s.length()-1)-5))+"_c.jpg";
+    }
 
     /**
      * Parcelable methods
@@ -96,8 +82,7 @@ public class Photo implements Parcelable {
                 in.readInt(),
                 in.readInt(),
                 in.readInt(),
-                in.readString(),
-                in.readInt()
+                in.readString()
         );
     }
 
@@ -118,7 +103,6 @@ public class Photo implements Parcelable {
         out.writeInt(isfriend);
         out.writeInt(isfamily);
         out.writeString(url_s);
-        out.writeInt(isTouched);
     }
 
     public Photo getParcelable(Bundle savedInstanceState){

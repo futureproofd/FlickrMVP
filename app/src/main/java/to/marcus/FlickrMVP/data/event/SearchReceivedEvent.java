@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import to.marcus.FlickrMVP.model.Photo;
 
 /**
- * Created by mplienegger on 6/29/2015.
+ * Created by marcus on 6/29/2015.
  */
 public class SearchReceivedEvent {
 

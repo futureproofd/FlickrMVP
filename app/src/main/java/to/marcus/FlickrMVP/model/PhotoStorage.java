@@ -39,7 +39,6 @@ public class PhotoStorage{
     }
 
     public void deletePhoto(String url){
-        Log.i(TAG, "deleted photo");
         mPhotos.remove(url);
     }
 

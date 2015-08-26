@@ -37,11 +37,10 @@ public class RecentModule {
 
     @Provides @Singleton
     public RecentPresenter provideImagePresenter(PhotosView photosView
-            ,Bus bus
-            ,PhotoCache photoCache
-            ,PhotoInteractor photoInteractor
-    )
-    {
-        return new RecentPresenterImpl(photosView, bus, photoCache, photoInteractor);
-    }
+                ,Bus bus
+                ,PhotoCache photoCache
+                ,PhotoInteractor photoInteractor
+             ){
+            return new RecentPresenterImpl(photosView, bus, photoCache, photoInteractor);
+        }
 }

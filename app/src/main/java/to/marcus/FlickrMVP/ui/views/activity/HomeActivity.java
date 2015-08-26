@@ -47,6 +47,7 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     public Toolbar mToolBar;
     public SlidingTabLayout mSlidingTabLayout;
     public EditText mSearchBox;
+    private boolean mKeyboardStatus;
     public ImageView mClearSearchButton;
     public ImageView mClearHistoryButton;
     public ProgressBar mProgressBar;
@@ -100,6 +101,9 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
             public void onPageScrolled(int i, float v, int i2) {
             }
 
+            /*
+            Control visibility of toolbar functions
+             */
             @Override
             public void onPageSelected(int position) {
                 setToolbarTitle(position);
@@ -113,6 +117,12 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
                     mSearchBox.setVisibility(View.GONE);
                 }else{
                     mSearchBox.setVisibility(View.VISIBLE);
+                    mSearchBox.requestFocus();
+                    if(isKeyboardActive()){
+                        showKeyboard();
+                    }else{
+                        dismissKeyboard();
+                    }
                     mClearSearchButton.setVisibility(View.VISIBLE);
                     mClearHistoryButton.setVisibility(View.GONE);
                 }
@@ -208,13 +218,19 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     }
 
     public void dismissKeyboard(){
+        mKeyboardStatus = false;
         InputMethodManager imm =(InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSearchBox.getWindowToken(), 0);
     }
 
     public void showKeyboard(){
         InputMethodManager imm =(InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInputFromWindow(mSearchBox.getWindowToken(), InputMethodManager.SHOW_FORCED, 1);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        mKeyboardStatus = true;
+    }
+
+    private boolean isKeyboardActive(){
+        return mKeyboardStatus;
     }
 
     public void dismissToolBar(){

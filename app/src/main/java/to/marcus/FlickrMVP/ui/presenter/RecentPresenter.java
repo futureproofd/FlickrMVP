@@ -18,6 +18,8 @@ public interface RecentPresenter {
 
     public void onDestroy();
 
+    public void onDestroyView();
+
     public void onRefresh();
 
     public void requestNetworkPhotos();

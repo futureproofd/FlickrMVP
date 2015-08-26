@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
@@ -65,22 +64,16 @@ public class HistoryPresenterImpl implements HistoryPresenter{
     }
 
     @Override
-    public void onResume() {
-
-    }
+    public void onResume(){}
 
     @Override
-    public void onPause() {
-    }
+    public void onPause(){}
 
     @Override
-    public void onDestroy() {
-    }
+    public void onDestroy(){}
 
     @Override
-    public void onRefresh() {
-
-    }
+    public void onRefresh(){}
 
     @Override
     public void onDeletePhotos(){
@@ -105,7 +98,6 @@ public class HistoryPresenterImpl implements HistoryPresenter{
                     @Override
                     public void onItemClick(View v, int position){
                         Photo photo = view.getAdapter().getItem(position);
-                        photoInteractor.addPhoto(photo);
                         onNetworkPhotoSelected(photo.getBigUrl());
                     }
                 }

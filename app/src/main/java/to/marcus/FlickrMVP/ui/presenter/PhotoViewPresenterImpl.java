@@ -25,28 +25,16 @@ public class PhotoViewPresenterImpl implements PhotoViewPresenter {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState){
-        view.toggleFullScreen();
-        if(savedInstanceState == null){
-            //initInstanceState();
-        }else{
-           // restoreInstanceState(savedInstanceState);
-        }
-    }
+    public void onActivityCreated(Bundle savedInstanceState){view.toggleFullScreen();}
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-
-    }
+    public void onSaveInstanceState(Bundle savedInstanceState){}
 
     @Override
-    public void onResume() {
-
-    }
+    public void onResume(){}
 
     @Override
-    public void onPause() {
-    }
+    public void onPause(){}
 
     @Override
     public void onDestroy(){
@@ -59,9 +47,7 @@ public class PhotoViewPresenterImpl implements PhotoViewPresenter {
     }
 
     @Override
-    public void onRefresh(){
-
-    }
+    public void onRefresh(){}
 
     @Override
     public void requestNetworkPhoto(String url){

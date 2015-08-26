@@ -114,13 +114,10 @@ public class HistoryFragment extends BaseFragment implements PhotosView{
     public void initSwipeRefreshWidget(){}
 
     @Override
-    public void showProgressBar() {
-
-    }
+    public void showProgressBar(){}
 
     @Override
-    public void hideProgressBar(){
-    }
+    public void hideProgressBar(){}
 
     @Override
     public void showSwipeRefreshWidget(){}
