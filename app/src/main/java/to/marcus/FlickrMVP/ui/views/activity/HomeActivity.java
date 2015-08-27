@@ -1,12 +1,9 @@
 package to.marcus.FlickrMVP.ui.views.activity;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -21,15 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-
 import to.marcus.FlickrMVP.R;
-import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
-import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.views.HomeView;
-import to.marcus.FlickrMVP.ui.views.base.BaseFragment;
 import to.marcus.FlickrMVP.ui.views.fragments.HistoryFragment;
 import to.marcus.FlickrMVP.ui.views.fragments.SearchFragment;
 import to.marcus.FlickrMVP.ui.views.supportwidgets.DepthPageTransformer;
@@ -118,7 +109,7 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
                 }else{
                     mSearchBox.setVisibility(View.VISIBLE);
                     mSearchBox.requestFocus();
-                    if(isKeyboardActive()){
+                    if(!isKeyboardActive()){
                         showKeyboard();
                     }else{
                         dismissKeyboard();
@@ -218,7 +209,6 @@ public class HomeActivity extends ActionBarActivity implements HomeView {
     }
 
     public void dismissKeyboard(){
-        mKeyboardStatus = false;
         InputMethodManager imm =(InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSearchBox.getWindowToken(), 0);
     }

@@ -154,12 +154,6 @@ public class SearchFragment extends BaseFragment implements PhotosView{
     public boolean isSwipeRefreshing(){return mSwipeRefreshWidget.isRefreshing();}
 
     @Override
-    public void showKeyboard(){((HomeActivity)getActivity()).showKeyboard();}
-
-    @Override
-    public void hideKeyboard(){((HomeActivity)getActivity()).dismissKeyboard();}
-
-    @Override
     public void showWebViewPhotoFragment(String url){
         Intent intent = new Intent(getActivity(), PhotoViewActivity.class);
         intent.putExtra(getString(R.string.large_photo), url);

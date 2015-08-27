@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.View;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.util.ArrayList;
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.ImagesReceivedEvent;
@@ -107,6 +108,7 @@ public class RecentPresenterImpl implements RecentPresenter {
 
     private void initInstanceState(){
         defaultPhotosArray = PhotoFactory.Photos.initDefaultPhotosArray();
+        defaultPhotosArray.setPhotos(new ArrayList<Photo>());
     }
 
     private void initResponseHandler(){

@@ -3,25 +3,19 @@ package to.marcus.FlickrMVP.ui.presenter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
 import to.marcus.FlickrMVP.data.event.SearchReceivedEvent;
 import to.marcus.FlickrMVP.data.event.SearchRequestedEvent;
 import to.marcus.FlickrMVP.data.interactor.PhotoInteractor;
-import to.marcus.FlickrMVP.data.interactor.PhotoInteractorImpl;
 import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
 import to.marcus.FlickrMVP.ui.adapter.PhotoRecyclerAdapter;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
-import to.marcus.FlickrMVP.ui.views.activity.HomeActivity;
 
 /**
  * Created by marcus on 6/26/2015
@@ -48,12 +42,10 @@ public class SearchPresenterImpl implements SearchPresenter {
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         if(savedInstanceState == null){
-            view.showKeyboard();
             initInstanceState();
             initGridViewAdapter();
         }else{
             restoreInstanceState(savedInstanceState);
-            //view.hideKeyboard();
         }
         view.initSwipeRefreshWidget();
     }
@@ -142,6 +134,6 @@ public class SearchPresenterImpl implements SearchPresenter {
                         photoInteractor.addPhoto(photo);
                         onNetworkPhotoSelected(photo.getBigUrl());
                     }
-        }));
+                }));
     }
 }

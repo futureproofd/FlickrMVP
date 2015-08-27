@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -127,12 +125,6 @@ public class HistoryFragment extends BaseFragment implements PhotosView{
 
     @Override
     public boolean isSwipeRefreshing(){return false;}
-
-    @Override
-    public void showKeyboard(){}
-
-    @Override
-    public void hideKeyboard(){}
 
     @Override
     public void showWebViewPhotoFragment(String url){

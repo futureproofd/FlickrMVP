@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import java.util.Arrays;
 import java.util.List;
 import dagger.ObjectGraph;
-import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 
 /**
  * Created by marcus on 31/03/15.
