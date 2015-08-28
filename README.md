@@ -15,7 +15,7 @@ ViewPager main screen:
 
 ![Animations and Refresh](https://github.com/futureproofd/FlickrMVP/blob/master/assets/screencaps/home.png)
 
-Different navigational animations (Including Refresh):
+Different navigational animations and functionality (Including Refresh and fullscreen):
 
 ![Animations and Refresh](https://github.com/futureproofd/FlickrMVP/blob/master/assets/screencaps/features.png)
 
