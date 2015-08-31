@@ -1,5 +1,10 @@
 # FlickrMVP
-A project demonstrating the usage of MVP Architecture in Android framework to efficently pull images via Flickr API. The project is using the following libraries:
+A project demonstrating the usage of MVP Architecture in Android framework to efficently pull images via Flickr API:
+
+- There is a one-to-one relationship between the View and Presenter. (One View is mapped to one Presenter)
+- View (fragment implementation) has a reference to a Presenter. (View has no reference to the Model)
+
+The project is using the following libraries:
 
 - Dagger1 
 - Otto EventBus 
